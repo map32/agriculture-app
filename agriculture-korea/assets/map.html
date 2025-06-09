@@ -1,0 +1,328 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=e0d156f68eeeb86d84e356eda06761ba&libraries=services,clusterer,drawing"></script> 
+        <style>
+            .switch {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                height: 1em;
+                width: 1em;
+                z-index: 10;
+                background-color: rgba(154, 224, 245, 0.377);
+                padding: 5px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            }
+            .draw {
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+                width: 3em;
+                height: 1.5em;
+                background-color: rgba(154, 224, 245, 0.377);
+                padding: 5px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                z-index: 10;
+            }
+            .draw button {
+                width: 100%;
+                height: 100%;
+                background-color: transparent;
+                color: #333;
+                border: none;
+                cursor: pointer;
+            }
+
+            .info {
+
+                background-color: rgba(255, 255, 255, 0.8);
+                padding: 4px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                z-index: 10;
+                width: 10em;
+                min-height: 3em;
+            }
+
+            .arrow {
+                position: absolute;
+                width: 0;
+                height: 0;
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-bottom: 10px solid rgba(255, 255, 255, 1);
+            }
+        </style>
+    </head>
+    <body>
+        <div id="map" style="height:100%;width:100%;background-color:aliceblue;position:relative">
+            <div class="switch">
+                
+            </div>
+            <div class="draw">
+                <button id="drawButton">추가</button>
+            </div>
+        <script type="text/javascript">
+            let manager, map, geocoder;
+            let state = {
+                drawing: false,
+                polygon: null,
+                startMarker: null,
+                endMarker: null,
+                polyline: null
+            };
+            let polygons = [];
+            let overlays = [];
+            let opened = [];
+            const getInfoContent = (polygons) => {
+                if (polygons.length === 0) {
+                    return '<p>다각형 정보가 없습니다.</p>';
+                }
+                return polygons.map((polygon, index) => {
+                    const path = polygon.getPath();
+                    const coordinates = path.map(latlng => `(${latlng.getLat().toFixed(6)}, ${latlng.getLng().toFixed(6)})`).join(', ');
+                    return `<div class="info">
+                        <div class="arrow" style="top: -10px; left: 50%; transform: translateX(-50%);"></div>
+                            <p>다각형 정보</p>
+                            <p>다각형 ${index + 1}: ${coordinates}</p>
+                        </div>`;
+                });
+            };
+            function initPolygons(polygons_) {
+                const newDiv = document.createElement('div');
+                polygons_.forEach(polygon => {
+                    const convertedPath = polygon.path.map(obj => new kakao.maps.LatLng(obj.Ma, obj.La));
+                    const obj = new kakao.maps.Polygon({
+                        map: map,
+                        path: convertedPath,
+                        strokeWeight: polygon.strokeWeight || 2,
+                        strokeColor: polygon.strokeColor || '#FF0000',
+                        strokeOpacity: polygon.strokeOpacity || 0.8,
+                        fillColor: polygon.fillColor || '#FF0000',
+                        fillOpacity: polygon.fillOpacity || 0.5
+                    });
+                    obj.setMap(map);
+                    polygons.push(obj);
+                    if (window.ReactNativeWebView) {
+                        window.ReactNativeWebView.postMessage(JSON.stringify({
+                            data: polygon,
+                            type: 'polygon-click'
+                        }))
+                    }
+                });
+                const overlay = getInfoContent(polygons);
+                for (let i=0;i<polygons.length;i++) {
+                    const custom = new kakao.maps.CustomOverlay({
+                        map: map,
+                        position: getPolygonCenter(polygons[i]),
+                        clickable: true,
+                        content: overlay[i],
+                        yAnchor: 0
+                    })
+                    overlays.push(custom);
+                    opened.push(false);
+                    kakao.maps.event.addListener(polygons[i], 'click', function(e) {
+                        if (!opened[i]) overlays[i].setMap(map)
+                        else overlays[i].setMap(null);
+                        opened[i] = !opened[i];
+                    })
+                }
+                
+            }
+            function resetState() {
+                state.drawing = false;
+                state.polygon = null;
+                if (state.startMarker) {
+                    state.startMarker.setMap(null);
+                }
+                state.startMarker = null;
+                if (state.endMarker) {
+                    state.endMarker.setMap(null);
+                }
+                state.endMarker = null;
+                if (state.polyline) {
+                    state.polyline.setMap(null);
+                }
+                state.polyline = null;
+            }
+
+            function getPolygonCenter(poly) {
+                const path = poly.getPath();
+                if (path.length === 0) return null;
+
+                let north = path[0], south = path[0], east = path[0], west = path[0];
+                for (let i = 1; i < path.length; i++) {
+                    const pt = path[i];
+                    if (pt.getLat() > north.getLat()) north = pt;
+                    if (pt.getLat() < south.getLat()) south = pt;
+                    if (pt.getLng() > east.getLng()) east = pt;
+                    if (pt.getLng() < west.getLng()) west = pt;
+                }
+                const avgLat = (north.getLat() + south.getLat() + east.getLat() + west.getLat()) / 4;
+                const avgLng = (north.getLng() + south.getLng() + east.getLng() + west.getLng()) / 4;
+                return new kakao.maps.LatLng(avgLat, avgLng);
+            }
+
+            function initMap() {
+                
+                const container = document.getElementById('map');
+                try {
+                    const options = {
+                        center: new kakao.maps.LatLng(36.56, 127.58),
+                        level: 10,
+                        mapTypeId: kakao.maps.MapTypeId.HYBRID,
+                    };
+                    map = new kakao.maps.Map(container, options);
+                    kakao.maps.event.addListener(map, 'click', handleMapClick);
+                    geocoder = new kakao.maps.services.Geocoder();
+                    if (!window.ReactNativeWebView) {
+                        localStorage.getItem('polygonData') && JSON.parse(localStorage.getItem('polygonData')).forEach(polygonData => {
+                        const polygon = new kakao.maps.Polygon({
+                            map: map,
+                            ...polygonData
+                        });
+                        polygons.push(polygon);
+                        polygon.setMap(map);
+                        kakao.maps.event.addListener(polygon, 'click', function() {
+                            polygon.setMap(null);
+                            polygons = polygons.filter(p => p !== polygon);
+                            sendPolygonData(polygons.map(p => p.getPath().getArray()));
+                        });
+                        });
+                    } else {
+                        //ready to receive polygon data from React Native
+                        document.addEventListener('initpolygons', function(e) {
+                            try {
+                                const polygonsData = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail;
+                                if (polygonsData) initPolygons(polygonsData);
+                            } catch (error) {
+                                const newDiv = document.createElement('div');
+                                newDiv.textContent = 'Error parsing polygons data: ' + error.message;
+                                newDiv.style.position = 'absolute';
+                                newDiv.style.top = '10px';
+                                newDiv.style.left = '10px';
+                                newDiv.style.background = 'rgba(255,255,255,0.8)';
+                                newDiv.style.padding = '8px';
+                                newDiv.style.borderRadius = '4px';
+                                newDiv.style.zIndex = '10';
+                                document.body.appendChild(newDiv);
+                            }
+                        });
+                        window.ReactNativeWebView.postMessage(JSON.stringify({
+                            type: 'ready'
+                        }));
+                    }
+                    
+                } catch (e) {
+                    const newDiv = document.createElement('div');
+                    newDiv.textContent = 'error occured: ' + e.message;
+                    newDiv.style.position = 'absolute';
+                    newDiv.style.top = '10px';
+                    newDiv.style.left = '10px';
+                    newDiv.style.background = 'rgba(255,255,255,0.8)';
+                    newDiv.style.padding = '8px';
+                    newDiv.style.borderRadius = '4px';
+                    newDiv.style.zIndex = '10';
+                    document.body.appendChild(newDiv);
+                }
+            }
+            // Draw button click event
+            function handleButtonClick() {
+                console.log(state.drawing, state.polygon, state.startMarker, state.endMarker, state.polyline);
+                if (state.drawing) {
+                    // Stop drawing
+                    resetState();
+                    this.textContent = '추가';
+                } else {
+                    // Start drawing
+                    state.drawing = true;
+                    this.textContent = '취소';
+                    state.polygon = [];
+                }
+            }
+            document.getElementById('drawButton').addEventListener('click', handleButtonClick);
+            function displayPolygonInfo(polygon, position) {
+                var overlay = new kakao.maps.CustomOverlay({
+                    content: content,
+                    map: map,
+                    position       
+                });
+            }
+            function handleMapClick(event) {
+                if (state.drawing) {
+                    const latlng = event.latLng;
+                    state.polygon.push(latlng);
+                    if (state.polygon.length === 1) {
+                        state.startMarker = new kakao.maps.Marker({
+                            position: latlng,
+                            map: map,
+                            clickable: true
+                        });
+                        state.startMarker.setMap(map);
+                        state.startMarker.setClickable(true);
+                        kakao.maps.event.addListener(state.startMarker, 'click', handleEndDrawing);
+                    } else if (state.polygon.length >= 2){
+                        if (state.endMarker) {
+                            state.endMarker.setMap(null);
+                        }
+                        state.endMarker = new kakao.maps.Marker({
+                            position: latlng,
+                            map: map
+                        });
+                        state.endMarker.setMap(map);
+                        if (state.polyline) {
+                            state.polyline.setMap(null);
+                        }
+                        state.polyline = new kakao.maps.Polyline({
+                            map: map,
+                            path: [...state.polygon]
+                        });
+                        state.polyline.setMap(map);
+                    }
+                }
+            }
+            function sendPolygonData(polygon) {
+                if (!window.ReactNativeWebView) {
+                    // Fallback for non-React Native environments
+                    localStorage.setItem('polygonData', JSON.stringify(polygon));
+                    return;
+                }
+                window.ReactNativeWebView.postMessage(JSON.stringify({
+                    type: 'polygon',
+                    data: polygon
+                }));
+            }
+            function handleEndDrawing(event) {
+                if (state.drawing && state.startMarker && state.polygon.length > 2) {
+                    if (state.polygon) {
+                        const polygon = new kakao.maps.Polygon({
+                            map: map,
+                            path: state.polygon,
+                            strokeWeight: 2,
+                            strokeColor: '#FF0000',
+                            strokeOpacity: 0.8,
+                            fillColor: '#FF0000',
+                            fillOpacity: 0.5
+                        });
+                        polygon.setMap(map);
+                        polygons.push(polygon);
+                        sendPolygonData({path: state.polygon, strokeWeight: 2, strokeColor: '#FF0000', strokeOpacity: 0.8, fillColor: '#FF0000', fillOpacity: 0.5});
+                        resetState();
+                        document.getElementById('drawButton').textContent = '추가';
+                    }
+                }
+            }
+
+
+            // Wait for Kakao Maps SDK to load
+            if (window.kakao && window.kakao.maps) {
+                initMap();
+            } else {
+                document.addEventListener('DOMContentLoaded', initMap);
+            }
+        </script>       
+    </body>
+</html>    
