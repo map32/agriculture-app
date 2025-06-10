@@ -106,18 +106,13 @@
                     });
                     obj.setMap(map);
                     polygons.push(obj);
-                    if (window.ReactNativeWebView) {
-                        window.ReactNativeWebView.postMessage(JSON.stringify({
-                            data: polygon,
-                            type: 'polygon-click'
-                        }))
-                    }
                 });
                 const overlay = getInfoContent(polygons);
                 for (let i=0;i<polygons.length;i++) {
+                    const center = getPolygonCenter(polygons[i]);
                     const custom = new kakao.maps.CustomOverlay({
                         map: map,
-                        position: getPolygonCenter(polygons[i]),
+                        position: center,
                         clickable: true,
                         content: overlay[i],
                         yAnchor: 0
@@ -128,6 +123,18 @@
                         if (!opened[i]) overlays[i].setMap(map)
                         else overlays[i].setMap(null);
                         opened[i] = !opened[i];
+                        if (window.ReactNativeWebView) {
+                            const data = {
+                                path: polygons[i].getPath().map((latlng) => ({lat: latlng.getLat(), lng: latlng.getLng()})),
+                                center: {lat: center.getLat(), lng: center.getLng()},
+                                area: polygons[i].getArea(),
+                                perimeter: polygons[i].getLength()
+                            }
+                            window.ReactNativeWebView.postMessage(JSON.stringify({
+                                data: data,
+                                type: 'polygon-click'
+                            }))
+                        }
                     })
                 }
                 
