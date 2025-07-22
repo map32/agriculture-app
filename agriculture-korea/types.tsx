@@ -4,5 +4,7 @@ export interface PolygonType {
   center: Coord,
   path: Coord[],
   area: number,
-  perimeter: number
+  perimeter: number,
+  id?: string,
+  title?: string
 }

@@ -54,6 +54,7 @@ export default function Index() {
     const {data, type} = JSON.parse(event.nativeEvent.data);
     //console.log('Received message from WebView:', data, type);
     if (type === 'polygon') {
+      data.id = Math.random().toString(36).substr(2, 9);
       addPolygon(data).then(() => {
         //console.log('Polygon added:', data);
       }
@@ -119,10 +120,12 @@ export default function Index() {
         width: 24,
         borderRadius: 4
       }}
-      onPress={async () => {await getShortTermForecast(55,127);}}>
+      onPress={async () => {
+        await getShortTermForecast(55,127);
+        }}>
 
       </TouchableOpacity>
-      <PlotModal modalRef={modalRef} data={selectedPlot}/>
+      <PlotModal modalRef={modalRef} data={selectedPlot} setData={setSelectedPlot}/>
     </SafeAreaView>
   );
 }
