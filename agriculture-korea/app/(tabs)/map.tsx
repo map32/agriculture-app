@@ -26,6 +26,15 @@ const addPolygon = async (polygon: any) => {
   await AsyncStorage.setItem('polygons', JSON.stringify(polygons));
 }
 
+const editPolygon = async (polygon: any) => {
+  const polygons = await getPolygons();
+  const index = polygons.findIndex((p: any) => p.id === polygon.id);
+  if (index !== -1) {
+    polygons[index] = polygon;
+    await AsyncStorage.setItem('polygons', JSON.stringify(polygons));
+  }
+}
+
 const removePolygon = async (polygon: any) => {
   const polygons = await getPolygons();
   const index = polygons.findIndex((p: any) => p.id === polygon.id);
@@ -49,6 +58,10 @@ export default function Index() {
     readAsStringAsync(index[0].localUri).then((data) => {
         setHtml(data);
     });
+  }
+
+  const saveData = () => {
+    editPolygon(selectedPlot);
   }
   const handleMessage = async (event: any) => {
     const {data, type} = JSON.parse(event.nativeEvent.data);
@@ -109,7 +122,7 @@ export default function Index() {
         onMessage={handleMessage}
         javaScriptEnabled={true}
         source={{html: html || ''}}
-        style={{ height: windowHeight, width: width}}
+        style={{ height: windowHeight, width: width }}
       />
       <TouchableOpacity style={{
         position: 'absolute',
@@ -125,7 +138,7 @@ export default function Index() {
         }}>
 
       </TouchableOpacity>
-      <PlotModal modalRef={modalRef} data={selectedPlot} setData={setSelectedPlot}/>
+      <PlotModal modalRef={modalRef} data={selectedPlot} setData={setSelectedPlot} saveData={saveData}/>
     </SafeAreaView>
   );
 }

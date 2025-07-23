@@ -6,5 +6,6 @@ export interface PolygonType {
   area: number,
   perimeter: number,
   id?: string,
-  title?: string
+  title?: string,
+  crops?: string[]
 }

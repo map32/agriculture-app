@@ -2,23 +2,48 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, DimensionValue } from 'react-native';
 import SwipeModal, { SwipeModalPublicMethods } from '@birdwingo/react-native-swipe-modal';
 import { PolygonType } from '@/types';
-import { findClosestPoint } from '@/utils/turf';
+import { findClosestPoint, findMidtermClosestPoint } from '@/utils/turf';
 import { getShortTermForecast } from '@/apis/useWeatherForecast'
 import CropInfo from '@/assets/crop_info.json';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { getCurrentWeather } from '@/apis/useCurrentWeather';
 import { getUltraShortTermForecast } from '@/apis/useUltraShortForecast';
+import { getMediumTermRainForecast, getMediumTermTemperatureForecast } from '@/apis/useMidtermForecast';
+import Screen from '@/components/crops';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface ModalProps {
     data: PolygonType | undefined,
     modalRef: React.RefObject<SwipeModalPublicMethods | null>,
-    setData: (data?: PolygonType) => void
+    setData: (data?: PolygonType) => void,
+    saveData: any
 }
 
 const pad = (n: number) => n.toString().padStart(2, '0');
 
+const wed = (cloudiness: number, raininess: number, snowiness: number) => {
+    if (snowiness > 0.1) {
 
-const PlotModal: FC<ModalProps> = ({modalRef, data, setData}) => {
+    }
+}
+
+const formatArea = (areaInSquareMeters: number | undefined) => {
+    if (!areaInSquareMeters) return;
+    // 1. Convert from sq meters to sq kms
+    const areaInSquareKm = areaInSquareMeters / 1000000;
+
+    // 2. Round to the nearest whole number (removes decimals)
+    const roundedArea = Math.round(areaInSquareKm);
+
+    // 3. Apply appropriate commas
+    // Using toLocaleString() is a common way to add thousands separators
+    const formattedArea = roundedArea.toLocaleString(); // Uses default locale, or specify 'en-US' for consistency
+
+    return `${formattedArea} sq km`;
+}
+
+
+const PlotModal: FC<ModalProps> = ({modalRef, data, setData, saveData}) => {
     const showModal = () => modalRef.current?.show(); // Call this function to show modal
     const hideModal = () => modalRef.current?.hide(); // Call this function to hide modal
     
@@ -26,7 +51,7 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData}) => {
     const [weather, setWeather] = useState<any>();
     const [selectedDate, setSelectedDate] = useState<string>();
     const [condensed, setCondensed] = useState<any[]>();
-
+    const insets = useSafeAreaInsets();
 
     const [sidePanelOpen, setSidePanelOpen] = useState(false);
 
@@ -59,73 +84,27 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData}) => {
     useEffect(() => {
         if (!data) return;
         const nearest = findClosestPoint([data.center.lng, data.center.lat]);
+        const m_nearest = findMidtermClosestPoint([data.center.lng, data.center.lat]);
         const addr: string = (nearest.properties['1단계'] +' '+ nearest.properties['2단계'] +' '+ nearest.properties['3단계']);
         const X = nearest.properties['격자 X']
         const Y = nearest.properties['격자 Y']
+        const m_code = m_nearest.properties['regId']
         const getWeather = async () => {
             const results = await Promise.all([
                 getCurrentWeather(X,Y),
                 getUltraShortTermForecast(X,Y),
-                getShortTermForecast(X,Y)
+                getShortTermForecast(X,Y),
+                getMediumTermRainForecast(m_code),
+                getMediumTermTemperatureForecast(m_code)
             ]);
             const currentWeather = results[0];
             const ultraShortWeatherForecasts = results[1];
             const weatherForecasts = results[2];
-            let condensed: any = []
-            if (weatherForecasts) {
-                Object.entries(weatherForecasts).map(([date, val]) => {
-                    const obj: any = Object.values(val).reduce((acc: any, curr: any) => {
-                        acc.high = acc.high > curr['TMP'] ? acc.high : curr['TMP'];
-                        acc.low = acc.low < curr['TMP'] ? acc.low : curr['TMP'];
-                        if (curr['SKY']) {
-                            if (curr['SKY'] === 1) acc.clearCount += 1;
-                            else if (curr['SKY'] === 3) acc.cloudyCount += 1;
-                            else if (curr['SKY'] === 4) acc.cloudyCount += 0.5;
-                        }
-                        if (curr['PTY']) {
-                            if (curr['PTY'] === 0) acc.dryCount += 1;
-                            else if (curr['PTY'] === 1) acc.rainyCount += 1;
-                            else if (curr['PTY'] === 2) {acc.rainyCount += 1;acc.snowyCount += 1;}
-                            else if (curr['PTY'] === 3) acc.snowyCount += 1;
-                            else if (curr['PTY'] === 4) acc.rainyCount += 1;
-                            else if (curr['PTY'] === 5) acc.rainyCount += 0.75;
-                            else if (curr['PTY'] === 6) {acc.rainyCount += 0.5;acc.snowyCount += 0.5;}
-                            else if (curr['PTY'] === 7) acc.snowyCount += 0.5;
-                        }
-                        return acc;
-                    }, {high: Number.NEGATIVE_INFINITY, low: Number.POSITIVE_INFINITY, clearCount: 0, cloudyCount: 0, midCount: 0, dryCount: 0, rainyCount: 0, snowyCount: 0});
-                    // SKY: 1=clear, 3=cloudy, 4=mid
-                    // SKY: 1=clear, 3=cloudy, 4=mid
-                    const skyCounts = {
-                        1: obj.clearCount,
-                        3: obj.cloudyCount,
-                        4: obj.midCount
-                    };
-                    // Find the sky category with the highest count
-                    const maxSky = Object.entries(skyCounts).reduce((a, b) => b[1] > a[1] ? b : a)[0];
-                    obj.sky = maxSky === '1' ? '맑음' : maxSky === '3' ? '흐림' : '구름';
-                    obj.sky = obj.clearCount + obj.cloudyCount / Object.keys(obj).length;
-                    // PTY: 0=dry, 1/2/4=rainy, 2/3=snowy
-                    const ptyCounts = {
-                        0: obj.dryCount,
-                        1: obj.rainyCount,
-                        2: obj.snowyCount
-                    };
-                    // Find the category with the highest count
-                    const maxPty = Object.entries(ptyCounts).reduce((a, b) => b[1] > a[1] ? b : a)[0];
-                    obj.pty = maxPty === '0' ? '없음' : maxPty === '1' ? '비' : '눈';
-
-                    obj.snow = obj.snowyCount / Object.keys(obj).length;
-                    obj.rain = obj.rainyCount / Object.keys(obj).length;
-                    // Parse YYYYMMDD string to Date object
-                    obj.date = new Date(
-                        Number(date.substring(0, 4)),
-                        Number(date.substring(4, 6)) - 1,
-                        Number(date.substring(6, 8))
-                    );
-                    const yyyymmdd = `${obj.date.getFullYear()}${pad(obj.date.getMonth() + 1)}${pad(obj.date.getDate())}`;
-                    obj.yyyymmdd = yyyymmdd;
-                    condensed.push(obj);
+            const midRain = results[3]
+            const midTemp = results[4]
+            if (midRain && midTemp) {
+                Object.entries(midRain).map(([date, value]) => {
+                    if (!weatherForecasts![date]) weatherForecasts![date] = {...value, ...midTemp[date], mid: true}
                 })
             }
             if (ultraShortWeatherForecasts) {
@@ -150,6 +129,85 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData}) => {
                     })
                 })
             }
+            let condensed: any = []
+            if (weatherForecasts) {
+                Object.entries(weatherForecasts).map(([date, val]) => {
+                    
+                    if (val.mid) {
+                        // Parse YYYYMMDD string to Date object
+                        const d = new Date(
+                            Number(date.substring(0, 4)),
+                            Number(date.substring(4, 6)) - 1,
+                            Number(date.substring(6, 8))
+                        );
+                        const yyyymmdd = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
+                        if (val.whole) {
+                            condensed.push({yyyymmdd, date: d, mid:true, high: val.max, low: val.min, am: {sky: val.rain, rain: val.rain, snow: 0}, pm: {sky: val.rain, rain: val.rain, snow: 0}})
+                        } else {
+                            condensed.push({yyyymmdd, date: d, mid:true, high: val.max, low: val.min, am: {sky: val.am.rain, rain: val.am.rain, snow: 0}, pm: {sky: val.pm.rain, rain: val.pm.rain, snow: 0}})
+                        }
+                        return;
+                    }
+                    const obj: any = Object.entries(val).reduce((acc: any, [time, curr]: [string, any]) => {
+                        if (time < "1200") {
+                            acc.am.count++;
+                            if (curr['SKY']) {
+                                if (curr['SKY'] === 3) acc.am.cloudyCount += 1;
+                                else if (curr['SKY'] === 4) acc.am.cloudyCount += 0.5;
+                            }
+                            if (curr['PTY']) {
+                                if (curr['PTY'] === 1) acc.am.rainyCount += 1;
+                                else if (curr['PTY'] === 2) {acc.am.rainyCount += 1; acc.am.snowyCount += 1;}
+                                else if (curr['PTY'] === 3) acc.am.snowyCount += 1;
+                                else if (curr['PTY'] === 4) acc.am.rainyCount += 1;
+                                else if (curr['PTY'] === 5) acc.am.rainyCount += 0.75;
+                                else if (curr['PTY'] === 6) {acc.am.rainyCount += 0.5; acc.am.snowyCount += 0.5;}
+                                else if (curr['PTY'] === 7) acc.am.snowyCount += 0.5;
+                            }
+                        } else {
+                            acc.pm.count++;
+                            if (curr['SKY']) {
+                                if (curr['SKY'] === 3) acc.pm.cloudyCount += 1;
+                                else if (curr['SKY'] === 4) acc.pm.cloudyCount += 0.5;
+                            }
+                            if (curr['PTY']) {
+                                if (curr['PTY'] === 1) acc.pm.rainyCount += 1;
+                                else if (curr['PTY'] === 2) {acc.pm.rainyCount += 1; acc.pm.snowyCount += 1;}
+                                else if (curr['PTY'] === 3) acc.pm.snowyCount += 1;
+                                else if (curr['PTY'] === 4) acc.pm.rainyCount += 1;
+                                else if (curr['PTY'] === 5) acc.pm.rainyCount += 0.75;
+                                else if (curr['PTY'] === 6) {acc.pm.rainyCount += 0.5; acc.pm.snowyCount += 0.5;}
+                                else if (curr['PTY'] === 7) acc.pm.snowyCount += 0.5;
+                            }
+                        }
+                        acc.high = acc.high > curr['TMP'] ? acc.high : curr['TMP'];
+                        acc.low = acc.low < curr['TMP'] ? acc.low : curr['TMP'];
+                        return acc;
+                    }, {high: Number.NEGATIVE_INFINITY, low: Number.POSITIVE_INFINITY, am: {cloudyCount: 0, rainyCount: 0, snowyCount: 0, count: 0}, pm: {cloudyCount: 0, rainyCount: 0, snowyCount: 0, count: 0}});
+                    // SKY: 1=clear, 3=cloudy, 4=mid
+                    // SKY: 1=clear, 3=cloudy, 4=mid
+    
+                    // Find the sky category with the highest count
+                    obj.am.sky = obj.am.cloudyCount / obj.am.count;
+                    obj.pm.sky = obj.pm.cloudyCount / obj.pm.count;
+
+                    // Find the category with the highest count
+
+                    obj.am.snow = obj.am.snowyCount / obj.am.count;
+                    obj.pm.snow = obj.pm.snowyCount / obj.pm.count;
+                    obj.am.rain = obj.am.rainyCount / obj.am.count;
+                    obj.pm.rain = obj.pm.rainyCount / obj.pm.count;
+                    // Parse YYYYMMDD string to Date object
+                    obj.date = new Date(
+                        Number(date.substring(0, 4)),
+                        Number(date.substring(4, 6)) - 1,
+                        Number(date.substring(6, 8))
+                    );
+                    const yyyymmdd = `${obj.date.getFullYear()}${pad(obj.date.getMonth() + 1)}${pad(obj.date.getDate())}`;
+                    obj.yyyymmdd = yyyymmdd;
+                    condensed.push(obj);
+                })
+            }
             setWeather(weatherForecasts);
             setCondensed(condensed);
         }
@@ -160,8 +218,8 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData}) => {
     const onFocus = () => {console.log(barWidth.value); barWidth.value = withTiming(100, {duration: 300})}
     const onBlur = () => {console.log(barWidth.value); barWidth.value = withTiming(0, {duration: 300})}
     return (
-        <SwipeModal ref={modalRef} wrapInGestureHandlerRootView maxHeight={600}>
-            <View style={styles.background} onLayout={onModalLayout}>
+        <SwipeModal ref={modalRef} wrapInGestureHandlerRootView maxHeight={600} onHide={saveData}>
+            <View style={[styles.background, {paddingBottom: insets.bottom}]} onLayout={onModalLayout}>
                 <View style={styles.header}>
                     <TextInput
                         style={styles.titleedit}
@@ -174,26 +232,26 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData}) => {
                     />
                     <Animated.View style={[styles.animbar, animatedBarStyle]} />
                 </View>
-                <Text style={styles.text}>내 농지의 정보</Text>
                 <Text style={styles.text}>{address}</Text>
-                <Text style={styles.text}>면적 {data?.area}제곱미터</Text>
+                <Text style={styles.text}>면적 {formatArea(data?.area)}</Text>
                 <Text style={styles.text}>날씨</Text>
 
                 <FlatList 
                 data={condensed}
                 horizontal
-                style={{width: '100%'}}
+                style={{height: 60, maxHeight: 60}}
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={styles.item}
                         onPress={() => {
+                            if (item.mid) return;
                             setSelectedDate(item.yyyymmdd);
                             setSidePanelOpen(true);
                         }}
                     >
                         <Text style={styles.text}>{item.date.getMonth() + 1}/{item.date.getDate()}</Text>
                         <Text style={styles.text}>{item.low} | {item.high}</Text>
-                        <Text style={styles.text}>{item.sky} {item.pty}</Text>
+                        <Text style={styles.text}></Text>
                     </TouchableOpacity>
                 )}
                 />
@@ -205,6 +263,7 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData}) => {
                 >
                     <Text style={styles.text}>상세 정보 열기</Text>
                 </TouchableOpacity>
+                <Screen />
             </View>
             <Animated.View style={[styles.sideview, animatedStyle]}>
                 <TouchableOpacity
@@ -217,12 +276,12 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData}) => {
                 <FlatList
                     data={
                         selectedDate && weather && weather[selectedDate]
-                            ? Object.entries(weather[selectedDate]).map(([key, val]) => (typeof val === 'object' && val !== null ? { ...val, time: key } : { time: key }))
+                            ? Object.entries(weather[selectedDate]).map(([key, val]) => (typeof val === 'object' && val !== null ? { ...val, time: key } : { time: key })).sort((a, b) => a.time.localeCompare(b.time))
                             : []
                     }
                     keyExtractor={(item) => item.time}
                     renderItem={({ item }: { item: any }) => (
-                        <View style={styles.item}>
+                        <View style={{paddingBottom: insets.bottom}}>
                             <Text style={styles.text}>{item.time}시</Text>
                             <Text style={styles.text}>기온: {item.TMP}°C</Text>
                             <Text style={styles.text}>하늘: {item.SKY}</Text>
@@ -235,7 +294,7 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData}) => {
                         </View>
                     )}
                 />
-                <Text style={[styles.text, {margin: 16}]}></Text>
+                <Screen />
             </Animated.View>
         </SwipeModal>
     );
@@ -244,7 +303,9 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData}) => {
 
 const styles = StyleSheet.create({
     background: {
-        backgroundColor: '#333333'
+        width: '100%',
+        backgroundColor: '#333333',
+        flex: 1
     },
     header: {
         backgroundColor: '#555555',
@@ -259,6 +320,9 @@ const styles = StyleSheet.create({
     },
     titleedit: {
         padding: 4,
+        color: '#fff',
+        width: '100%',
+        textAlign: 'center'
         //borderBottomWidth: 1,
     },
     animbar: {
@@ -286,7 +350,7 @@ const styles = StyleSheet.create({
     },
     item: {
         paddingVertical: 8,
-        backgroundColor: '#222222'
+        height: 60
     },
     panelButton: {
         marginTop: 16,

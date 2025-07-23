@@ -1,0 +1,1198 @@
+{
+    "cereals": [
+        {
+            "svcCode": "FC050501",
+            "svcCodeNm": "감자",
+            "svcCodeNmEng": "Potato"
+        },
+        {
+            "svcCode": "FC030305",
+            "svcCodeNm": "강낭콩",
+            "svcCodeNmEng": "Kidney Bean"
+        },
+        {
+            "svcCode": "FC050502",
+            "svcCodeNm": "고구마",
+            "svcCodeNmEng": "Sweet Potato"
+        },
+        {
+            "svcCode": "FC020206",
+            "svcCodeNm": "귀리",
+            "svcCodeNmEng": "Oats"
+        },
+        {
+            "svcCode": "FC040405",
+            "svcCodeNm": "기장",
+            "svcCodeNmEng": "Proso Millet"
+        },
+        {
+            "svcCode": "FC030399",
+            "svcCodeNm": "기타두류",
+            "svcCodeNmEng": "Other Beans/Legumes"
+        },
+        {
+            "svcCode": "FC020299",
+            "svcCodeNm": "기타맥류",
+            "svcCodeNmEng": "Other Barley/Wheat"
+        },
+        {
+            "svcCode": "FC040499",
+            "svcCodeNm": "기타잡곡류",
+            "svcCodeNmEng": "Other Grains"
+        },
+        {
+            "svcCode": "FC030303",
+            "svcCodeNm": "녹두",
+            "svcCodeNmEng": "Mung Bean"
+        },
+        {
+            "svcCode": "FC010101",
+            "svcCodeNm": "일반벼",
+            "svcCodeNmEng": "Common Rice Plant (Paddy Rice)"
+        },
+        {
+            "svcCode": "FC030306",
+            "svcCodeNm": "동부",
+            "svcCodeNmEng": "Cowpea"
+        },
+        {
+            "svcCode": "FC040404",
+            "svcCodeNm": "메밀",
+            "svcCodeNmEng": "Buckwheat"
+        },
+        {
+            "svcCode": "FC020203",
+            "svcCodeNm": "밀",
+            "svcCodeNmEng": "Wheat"
+        },
+        {
+            "svcCode": "FC010102",
+            "svcCodeNm": "밭벼",
+            "svcCodeNmEng": "Upland Rice"
+        },
+        {
+            "svcCode": "FC010107",
+            "svcCodeNm": "벼직파",
+            "svcCodeNmEng": "Direct Seeded Rice"
+        },
+        {
+            "svcCode": "FC020201",
+            "svcCodeNm": "보리",
+            "svcCodeNmEng": "Barley"
+        },
+        {
+            "svcCode": "FC040403",
+            "svcCodeNm": "수수",
+            "svcCodeNmEng": "Sorghum"
+        },
+        {
+            "svcCode": "FC010106",
+            "svcCodeNm": "쌀",
+            "svcCodeNmEng": "Rice (Grains)"
+        },
+        {
+            "svcCode": "FC010108",
+            "svcCodeNm": "쌀고급화",
+            "svcCodeNmEng": "Premium Rice"
+        },
+        {
+            "svcCode": "FC050503",
+            "svcCodeNm": "야콘",
+            "svcCodeNmEng": "Yacón"
+        },
+        {
+            "svcCode": "FC040401",
+            "svcCodeNm": "옥수수",
+            "svcCodeNmEng": "Corn/Maize"
+        },
+        {
+            "svcCode": "FC030304",
+            "svcCodeNm": "완두",
+            "svcCodeNmEng": "Peas"
+        },
+        {
+            "svcCode": "FC040407",
+            "svcCodeNm": "율무",
+            "svcCodeNmEng": "Job's Tears"
+        },
+        {
+            "svcCode": "FC040402",
+            "svcCodeNm": "조",
+            "svcCodeNmEng": "Foxtail Millet"
+        },
+        {
+            "svcCode": "FC030301",
+            "svcCodeNm": "콩",
+            "svcCodeNmEng": "Soybean"
+        },
+        {
+            "svcCode": "FC040408",
+            "svcCodeNm": "퀴노아",
+            "svcCodeNmEng": "Quinoa"
+        },
+        {
+            "svcCode": "FC020207",
+            "svcCodeNm": "트리티케일(라이밀)",
+            "svcCodeNmEng": "Triticale (Rye-Wheat Hybrid)"
+        },
+        {
+            "svcCode": "FC030302",
+            "svcCodeNm": "팥",
+            "svcCodeNmEng": "Red Bean"
+        },
+        {
+            "svcCode": "FC040406",
+            "svcCodeNm": "피",
+            "svcCodeNmEng": "Barnyard Millet"
+        },
+        {
+            "svcCode": "FC020205",
+            "svcCodeNm": "호밀",
+            "svcCodeNmEng": "Rye"
+        }
+        ],
+    "specialties":[
+        {
+            "svcCode": "IC0319C5",
+            "svcCodeNm": "감국",
+            "svcCodeNmEng": "Chrysanthemum indicum"
+        },
+        {
+            "svcCode": "IC0319B4",
+            "svcCodeNm": "감초",
+            "svcCodeNmEng": "Licorice"
+        },
+        {
+            "svcCode": "IC031901",
+            "svcCodeNm": "강활",
+            "svcCodeNmEng": "Korean Angelica (Dahurian Angelica)"
+        },
+        {
+            "svcCode": "IC031928",
+            "svcCodeNm": "구기자",
+            "svcCodeNmEng": "Goji Berry"
+        },
+        {
+            "svcCode": "IC0416WY",
+            "svcCodeNm": "기타기호작물",
+            "svcCodeNmEng": "Other Beverage Crops"
+        },
+        {
+            "svcCode": "IC021799",
+            "svcCodeNm": "기타버섯류",
+            "svcCodeNmEng": "Other Mushrooms"
+        },
+        {
+            "svcCode": "IC0319ZZ",
+            "svcCodeNm": "기타약용작물",
+            "svcCodeNmEng": "Other Medicinal Crops"
+        },
+        {
+            "svcCode": "IC0116WZ",
+            "svcCodeNm": "기타유지작물",
+            "svcCodeNmEng": "Other Oil Crops"
+        },
+        {
+            "svcCode": "IC021724",
+            "svcCodeNm": "노루궁뎅이버섯",
+            "svcCodeNmEng": "Lion's Mane Mushroom"
+        },
+        {
+            "svcCode": "IC021701",
+            "svcCodeNm": "느타리",
+            "svcCodeNmEng": "Oyster Mushroom"
+        },
+        {
+            "svcCode": "IC031903",
+            "svcCodeNm": "당귀",
+            "svcCodeNmEng": "Angelica gigas (Korean Angelica)"
+        },
+        {
+            "svcCode": "IC0519V5",
+            "svcCodeNm": "대마",
+            "svcCodeNmEng": "Hemp"
+        },
+        {
+            "svcCode": "IC011602",
+            "svcCodeNm": "들깨",
+            "svcCodeNmEng": "Perilla (for seeds/oil)"
+        },
+        {
+            "svcCode": "IC031951",
+            "svcCodeNm": "땅두릅(독활)",
+            "svcCodeNmEng": "Aralia continentalis (Spikenard)"
+        },
+        {
+            "svcCode": "IC011603",
+            "svcCodeNm": "땅콩",
+            "svcCodeNmEng": "Peanut"
+        },
+        {
+            "svcCode": "IC031975",
+            "svcCodeNm": "마(산약)",
+            "svcCodeNmEng": "Yam (Dioscorea batatas)"
+        },
+        {
+            "svcCode": "IC021706",
+            "svcCodeNm": "만가닥버섯",
+            "svcCodeNmEng": "Bunapi Mushroom / Hypsizygus tessellatus"
+        },
+        {
+            "svcCode": "IC031905",
+            "svcCodeNm": "맥문동",
+            "svcCodeNmEng": "Ophiopogon japonicus (Dwarf Lilyturf)"
+        },
+        {
+            "svcCode": "IC021707",
+            "svcCodeNm": "목이",
+            "svcCodeNmEng": "Wood Ear Mushroom"
+        },
+        {
+            "svcCode": "IC0219H3",
+            "svcCodeNm": "복령",
+            "svcCodeNmEng": "Poria cocos"
+        },
+        {
+            "svcCode": "IC031933",
+            "svcCodeNm": "복분자",
+            "svcCodeNmEng": "Korean Black Raspberry"
+        },
+        {
+            "svcCode": "IC031909",
+            "svcCodeNm": "삽주(백출)",
+            "svcCodeNmEng": "Atractylodes japonica (White Atractylodes)"
+        },
+        {
+            "svcCode": "IC021719",
+            "svcCodeNm": "상황버섯",
+            "svcCodeNmEng": "Phellinus linteus (Meshima Mushroom)"
+        },
+        {
+            "svcCode": "IC021711",
+            "svcCodeNm": "새송이",
+            "svcCodeNmEng": "King Oyster Mushroom"
+        },
+        {
+            "svcCode": "IC0319X9",
+            "svcCodeNm": "약용버섯",
+            "svcCodeNmEng": "Medicinal Mushrooms"
+        },
+        {
+            "svcCode": "IC021702",
+            "svcCodeNm": "양송이",
+            "svcCodeNmEng": "Button Mushroom"
+        },
+        {
+            "svcCode": "IC021709",
+            "svcCodeNm": "영지버섯",
+            "svcCodeNmEng": "Reishi Mushroom"
+        },
+        {
+            "svcCode": "IC031935",
+            "svcCodeNm": "오갈피나무(오가피)",
+            "svcCodeNmEng": "Siberian Ginseng (Eleuthero)"
+        },
+        {
+            "svcCode": "IC031930",
+            "svcCodeNm": "오미자",
+            "svcCodeNmEng": "Schisandra Berry"
+        },
+        {
+            "svcCode": "IC0217W4",
+            "svcCodeNm": "왕송이",
+            "svcCodeNmEng": "Giant King Oyster Mushroom"
+        },
+        {
+            "svcCode": "IC01",
+            "svcCodeNm": "유지작물",
+            "svcCodeNmEng": "Oil Crops"
+        },
+        {
+            "svcCode": "IC011606",
+            "svcCodeNm": "유채",
+            "svcCodeNmEng": "Rapeseed / Canola"
+        },
+        {
+            "svcCode": "IC031932",
+            "svcCodeNm": "율무(의이인)",
+            "svcCodeNmEng": "Job's Tears (Coix seed)"
+        },
+        {
+            "svcCode": "IC031801",
+            "svcCodeNm": "인삼",
+            "svcCodeNmEng": "Ginseng"
+        },
+        {
+            "svcCode": "IC011631",
+            "svcCodeNm": "잎들깨",
+            "svcCodeNmEng": "Perilla Leaves"
+        },
+        {
+            "svcCode": "IC031914",
+            "svcCodeNm": "작약",
+            "svcCodeNmEng": "Peony"
+        },
+        {
+            "svcCode": "IC031915",
+            "svcCodeNm": "지황",
+            "svcCodeNmEng": "Rehmannia"
+        },
+        {
+            "svcCode": "IC041628",
+            "svcCodeNm": "차류",
+            "svcCodeNmEng": "Teas"
+        },
+        {
+            "svcCode": "IC011601",
+            "svcCodeNm": "참깨",
+            "svcCodeNmEng": "Sesame"
+        },
+        {
+            "svcCode": "IC031917",
+            "svcCodeNm": "천궁",
+            "svcCodeNmEng": "Cnidium"
+        },
+        {
+            "svcCode": "IC031918",
+            "svcCodeNm": "천마",
+            "svcCodeNmEng": "Gastrodia elata (Orchid Root)"
+        },
+        {
+            "svcCode": "IC0217W5",
+            "svcCodeNm": "천마균류(뽕나무버섯류)",
+            "svcCodeNmEng": "Gastrodia Fungi (e.g., Oyster mushroom related to Gastrodia)"
+        },
+        {
+            "svcCode": "IC0519Y5",
+            "svcCodeNm": "천연염색",
+            "svcCodeNmEng": "Natural Dye Crops"
+        },
+        {
+            "svcCode": "IC0319V1",
+            "svcCodeNm": "초석잠",
+            "svcCodeNmEng": "Stachys sieboldii (Chinese Artichoke)"
+        },
+        {
+            "svcCode": "IC021705",
+            "svcCodeNm": "팽이버섯",
+            "svcCodeNmEng": "Enoki Mushroom"
+        },
+        {
+            "svcCode": "IC021704",
+            "svcCodeNm": "표고버섯",
+            "svcCodeNmEng": "Shiitake Mushroom"
+        },
+        {
+            "svcCode": "IC031924",
+            "svcCodeNm": "황기",
+            "svcCodeNmEng": "Astragalus"
+        }
+        ],
+    "vegetables":[
+        {
+            "svcCode": "VC010903",
+            "svcCodeNm": "가지",
+            "svcCodeNmEng": "Eggplant"
+        },
+        {
+            "svcCode": "VC021013",
+            "svcCodeNm": "갓",
+            "svcCodeNmEng": "Mustard Greens"
+        },
+        {
+            "svcCode": "VC051301",
+            "svcCodeNm": "결구상추(양상추)",
+            "svcCodeNmEng": "Head Lettuce (Iceberg Lettuce)"
+        },
+        {
+            "svcCode": "VC061419",
+            "svcCodeNm": "고려엉겅퀴(곤드레나물)",
+            "svcCodeNmEng": "Goryeo Thistle (Gondre Namul)"
+        },
+        {
+            "svcCode": "VC011205",
+            "svcCodeNm": "고추",
+            "svcCodeNmEng": "Chili Pepper"
+        },
+        {
+            "svcCode": "VC061499",
+            "svcCodeNm": "기타산채류",
+            "svcCodeNmEng": "Other Mountain Vegetables"
+        },
+        {
+            "svcCode": "VC051399",
+            "svcCodeNm": "기타양채류",
+            "svcCodeNmEng": "Other Western Vegetables"
+        },
+        {
+            "svcCode": "VC021099",
+            "svcCodeNm": "기타엽경채류",
+            "svcCodeNmEng": "Other Leaf and Stem Vegetables"
+        },
+        {
+            "svcCode": "VC031198",
+            "svcCodeNm": "기타엽채류",
+            "svcCodeNmEng": "Other Leafy Vegetables"
+        },
+        {
+            "svcCode": "VC041299",
+            "svcCodeNm": "기타조미채소류",
+            "svcCodeNmEng": "Other Seasoning Vegetables"
+        },
+        {
+            "svcCode": "VC021011",
+            "svcCodeNm": "깻잎",
+            "svcCodeNmEng": "Perilla Leaf"
+        },
+        {
+            "svcCode": "VC011302",
+            "svcCodeNm": "단고추(피망,파프리카,착색단고추)",
+            "svcCodeNmEng": "Bell Pepper (Pimento, Paprika, Colored Bell Pepper)"
+        },
+        {
+            "svcCode": "VC031103",
+            "svcCodeNm": "당근",
+            "svcCodeNmEng": "Carrot"
+        },
+        {
+            "svcCode": "VC061409",
+            "svcCodeNm": "더덕",
+            "svcCodeNmEng": "Deodeok (Codonopsis lanceolata)"
+        },
+        {
+            "svcCode": "VC061407",
+            "svcCodeNm": "도라지",
+            "svcCodeNmEng": "Bellflower Root"
+        },
+        {
+            "svcCode": "VC010804",
+            "svcCodeNm": "딸기",
+            "svcCodeNmEng": "Strawberry"
+        },
+        {
+            "svcCode": "VC051328",
+            "svcCodeNm": "로메인",
+            "svcCodeNmEng": "Romaine Lettuce"
+        },
+        {
+            "svcCode": "VC041209",
+            "svcCodeNm": "마늘",
+            "svcCodeNmEng": "Garlic"
+        },
+        {
+            "svcCode": "VC010805",
+            "svcCodeNm": "멜론",
+            "svcCodeNmEng": "Melon"
+        },
+        {
+            "svcCode": "VC031101",
+            "svcCodeNm": "무",
+            "svcCodeNmEng": "Radish (Korean Radish)"
+        },
+        {
+            "svcCode": "VC021009",
+            "svcCodeNm": "미나리",
+            "svcCodeNmEng": "Water Parsley"
+        },
+        {
+            "svcCode": "VC010904",
+            "svcCodeNm": "박",
+            "svcCodeNmEng": "Bottle Gourd"
+        },
+        {
+            "svcCode": "VC010806",
+            "svcCodeNm": "방울토마토",
+            "svcCodeNmEng": "Cherry Tomato"
+        },
+        {
+            "svcCode": "VC021001",
+            "svcCodeNm": "배추",
+            "svcCodeNmEng": "Napa Cabbage"
+        },
+        {
+            "svcCode": "VC021010",
+            "svcCodeNm": "부추",
+            "svcCodeNmEng": "Garlic Chives"
+        },
+        {
+            "svcCode": "VC051306",
+            "svcCodeNm": "브로콜리(녹색꽃양배추)",
+            "svcCodeNmEng": "Broccoli (Green Cauliflower)"
+        },
+        {
+            "svcCode": "VC061412",
+            "svcCodeNm": "산마늘",
+            "svcCodeNmEng": "Mountain Garlic (Wild Leek)"
+        },
+        {
+            "svcCode": "VC021005",
+            "svcCodeNm": "상추",
+            "svcCodeNmEng": "Lettuce"
+        },
+        {
+            "svcCode": "VC061424",
+            "svcCodeNm": "새싹",
+            "svcCodeNmEng": "Sprouts"
+        },
+        {
+            "svcCode": "VC041210",
+            "svcCodeNm": "생강",
+            "svcCodeNmEng": "Ginger"
+        },
+        {
+            "svcCode": "VC010801",
+            "svcCodeNm": "수박",
+            "svcCodeNmEng": "Watermelon"
+        },
+        {
+            "svcCode": "VC021008",
+            "svcCodeNm": "시금치",
+            "svcCodeNmEng": "Spinach"
+        },
+        {
+            "svcCode": "VC041298",
+            "svcCodeNm": "싹채소",
+            "svcCodeNmEng": "Sprout Vegetables"
+        },
+        {
+            "svcCode": "VC061029",
+            "svcCodeNm": "씀바귀",
+            "svcCodeNmEng": "Korean Lettuce / Ixeris sonchifolia"
+        },
+        {
+            "svcCode": "VC051315",
+            "svcCodeNm": "아스파라거스",
+            "svcCodeNmEng": "Asparagus"
+        },
+        {
+            "svcCode": "VC031102",
+            "svcCodeNm": "알타리무",
+            "svcCodeNmEng": "Young Radish (Ponytail Radish)"
+        },
+        {
+            "svcCode": "VC072105",
+            "svcCodeNm": "얌빈",
+            "svcCodeNmEng": "Jicama"
+        },
+        {
+            "svcCode": "VC021004",
+            "svcCodeNm": "양배추",
+            "svcCodeNmEng": "Cabbage"
+        },
+        {
+            "svcCode": "VC041201",
+            "svcCodeNm": "양파",
+            "svcCodeNmEng": "Onion"
+        },
+        {
+            "svcCode": "VC072101",
+            "svcCodeNm": "여주",
+            "svcCodeNmEng": "Bitter Melon"
+        },
+        {
+            "svcCode": "VC012101",
+            "svcCodeNm": "여주",
+            "svcCodeNmEng": "Bitter Melon"
+        },
+        {
+            "svcCode": "VC031006",
+            "svcCodeNm": "열무",
+            "svcCodeNmEng": "Young Summer Radish"
+        },
+        {
+            "svcCode": "VC031107",
+            "svcCodeNm": "엽채류",
+            "svcCodeNmEng": "Leafy Vegetables"
+        },
+        {
+            "svcCode": "VC010901",
+            "svcCodeNm": "오이",
+            "svcCodeNmEng": "Cucumber"
+        },
+        {
+            "svcCode": "VC010802",
+            "svcCodeNm": "참외",
+            "svcCodeNmEng": "Korean Melon"
+        },
+        {
+            "svcCode": "VC9910W3",
+            "svcCodeNm": "채소육묘",
+            "svcCodeNmEng": "Vegetable Seedlings"
+        },
+        {
+            "svcCode": "VC9910W8",
+            "svcCodeNm": "채소종자",
+            "svcCodeNmEng": "Vegetable Seeds"
+        },
+        {
+            "svcCode": "VC061401",
+            "svcCodeNm": "취나물",
+            "svcCodeNmEng": "Chwinamul (Aster scaber)"
+        },
+        {
+            "svcCode": "VC010803",
+            "svcCodeNm": "토마토",
+            "svcCodeNmEng": "Tomato"
+        },
+        {
+            "svcCode": "VC041202",
+            "svcCodeNm": "파",
+            "svcCodeNmEng": "Green Onion / Scallion"
+        },
+        {
+            "svcCode": "VC010902",
+            "svcCodeNm": "호박",
+            "svcCodeNmEng": "Pumpkin / Squash"
+        }
+        ],
+    "fruits":[
+        {
+            "svcCode": "FT060614",
+            "svcCodeNm": "감귤",
+            "svcCodeNmEng": "Citrus (Mandarin Orange)"
+        },
+        {
+            "svcCode": "FT080615",
+            "svcCodeNm": "구아바",
+            "svcCodeNmEng": "Guava"
+        },
+        {
+            "svcCode": "FT0706WU",
+            "svcCodeNm": "기타열대과수",
+            "svcCodeNmEng": "Other Tropical Fruits"
+        },
+        {
+            "svcCode": "FT0406WX",
+            "svcCodeNm": "기타장과류",
+            "svcCodeNmEng": "Other Berry Fruits"
+        },
+        {
+            "svcCode": "FT0206WY",
+            "svcCodeNm": "기타핵과류",
+            "svcCodeNmEng": "Other Stone Fruits"
+        },
+        {
+            "svcCode": "FT060605",
+            "svcCodeNm": "단감",
+            "svcCodeNmEng": "Sweet Persimmon"
+        },
+        {
+            "svcCode": "FT020702",
+            "svcCodeNm": "대추",
+            "svcCodeNmEng": "Jujube"
+        },
+        {
+            "svcCode": "FT060606",
+            "svcCodeNm": "떫은감",
+            "svcCodeNmEng": "Astringent Persimmon"
+        },
+        {
+            "svcCode": "FT070636",
+            "svcCodeNm": "망고",
+            "svcCodeNmEng": "Mango"
+        },
+        {
+            "svcCode": "FT020625",
+            "svcCodeNm": "매실",
+            "svcCodeNmEng": "Korean Plum (Maesil)"
+        },
+        {
+            "svcCode": "FT040627",
+            "svcCodeNm": "무화과",
+            "svcCodeNmEng": "Fig"
+        },
+        {
+            "svcCode": "FT010602",
+            "svcCodeNm": "배",
+            "svcCodeNmEng": "Pear (Korean Pear)"
+        },
+        {
+            "svcCode": "FT020604",
+            "svcCodeNm": "복숭아",
+            "svcCodeNmEng": "Peach"
+        },
+        {
+            "svcCode": "FT050659",
+            "svcCodeNm": "블루베리",
+            "svcCodeNmEng": "Blueberry"
+        },
+        {
+            "svcCode": "FT010601",
+            "svcCodeNm": "사과",
+            "svcCodeNmEng": "Apple"
+        },
+        {
+            "svcCode": "FT020610",
+            "svcCodeNm": "살구",
+            "svcCodeNmEng": "Apricot"
+        },
+        {
+            "svcCode": "FT0106A1",
+            "svcCodeNm": "서양배나무",
+            "svcCodeNmEng": "Western Pear Tree"
+        },
+        {
+            "svcCode": "FT040624",
+            "svcCodeNm": "석류",
+            "svcCodeNmEng": "Pomegranate"
+        },
+        {
+            "svcCode": "FT0206W1",
+            "svcCodeNm": "양앵두(체리)",
+            "svcCodeNmEng": "Cherry (Western Cherry)"
+        },
+        {
+            "svcCode": "FT060642",
+            "svcCodeNm": "온주밀감",
+            "svcCodeNmEng": "Satsuma Mandarin"
+        },
+        {
+            "svcCode": "FT070662",
+            "svcCodeNm": "올리브",
+            "svcCodeNmEng": "Olive"
+        },
+        {
+            "svcCode": "FT070658",
+            "svcCodeNm": "용과",
+            "svcCodeNmEng": "Dragon Fruit (Pitaya)"
+        },
+        {
+            "svcCode": "FT060620",
+            "svcCodeNm": "유자",
+            "svcCodeNmEng": "Yuzu"
+        },
+        {
+            "svcCode": "FT020608",
+            "svcCodeNm": "자두",
+            "svcCodeNmEng": "Plum"
+        },
+        {
+            "svcCode": "FT040611",
+            "svcCodeNm": "참다래(키위,다래)",
+            "svcCodeNmEng": "Korean Kiwi Fruit (Hardy Kiwi)"
+        },
+        {
+            "svcCode": "FT040603",
+            "svcCodeNm": "포도",
+            "svcCodeNmEng": "Grape"
+        }
+        ],
+    "flowers":[
+        {
+            "svcCode": "FL022401",
+            "svcCodeNm": "거베라",
+            "svcCodeNmEng": "Gerbera"
+        },
+        {
+            "svcCode": "FL082075",
+            "svcCodeNm": "관상화목류 Ⅰ",
+            "svcCodeNmEng": "Ornamental Woody Plants Ⅰ"
+        },
+        {
+            "svcCode": "FL082076",
+            "svcCodeNm": "관상화목류 Ⅱ",
+            "svcCodeNmEng": "Ornamental Woody Plants Ⅱ"
+        },
+        {
+            "svcCode": "FL022402",
+            "svcCodeNm": "국화",
+            "svcCodeNmEng": "Chrysanthemum"
+        },
+        {
+            "svcCode": "FL032501",
+            "svcCodeNm": "글라디올러스",
+            "svcCodeNmEng": "Gladiolus"
+        },
+        {
+            "svcCode": "FL0426ZZ",
+            "svcCodeNm": "기타관엽식물류",
+            "svcCodeNmEng": "Other Foliage Plants"
+        },
+        {
+            "svcCode": "FL0325ZZ",
+            "svcCodeNm": "기타구근류",
+            "svcCodeNmEng": "Other Bulbs"
+        },
+        {
+            "svcCode": "FL0522ZZ",
+            "svcCodeNm": "기타난류",
+            "svcCodeNmEng": "Other Orchids"
+        },
+        {
+            "svcCode": "FL0623ZZ",
+            "svcCodeNm": "기타선인장/다육식물류",
+            "svcCodeNmEng": "Other Cacti/Succulents"
+        },
+        {
+            "svcCode": "FL0224ZZ",
+            "svcCodeNm": "기타숙근류",
+            "svcCodeNmEng": "Other Perennials"
+        },
+        {
+            "svcCode": "FL0729WZ",
+            "svcCodeNm": "기타자생화",
+            "svcCodeNmEng": "Other Wildflowers"
+        },
+        {
+            "svcCode": "FL0121ZZ",
+            "svcCodeNm": "기타초화류",
+            "svcCodeNmEng": "Other Herbaceous Flowers"
+        },
+        {
+            "svcCode": "FL0820ZZ",
+            "svcCodeNm": "기타화목류",
+            "svcCodeNmEng": "Other Flowering Woody Plants"
+        },
+        {
+            "svcCode": "FL012177",
+            "svcCodeNm": "꽃도라지",
+            "svcCodeNmEng": "Balloon Flower (Platycodon grandiflorus)"
+        },
+        {
+            "svcCode": "FL082004",
+            "svcCodeNm": "꽃사과나무",
+            "svcCodeNmEng": "Flowering Crabapple Tree"
+        },
+        {
+            "svcCode": "FL012112",
+            "svcCodeNm": "꽃호박",
+            "svcCodeNmEng": "Ornamental Gourd/Squash"
+        },
+        {
+            "svcCode": "FL0525A4",
+            "svcCodeNm": "난류",
+            "svcCodeNmEng": "Orchids"
+        },
+        {
+            "svcCode": "FL032505",
+            "svcCodeNm": "라넌큐라스",
+            "svcCodeNmEng": "Ranunculus"
+        },
+        {
+            "svcCode": "FL082040",
+            "svcCodeNm": "목화",
+            "svcCodeNmEng": "Cotton Plant"
+        },
+        {
+            "svcCode": "FL082013",
+            "svcCodeNm": "무궁화",
+            "svcCodeNmEng": "Rose of Sharon (Hibiscus syriacus)"
+        },
+        {
+            "svcCode": "FL032508",
+            "svcCodeNm": "백합(나리)",
+            "svcCodeNmEng": "Lily"
+        },
+        {
+            "svcCode": "FL062327",
+            "svcCodeNm": "비모란",
+            "svcCodeNmEng": "Moon Cactus (Gymnocalycium mihanovichii)"
+        },
+        {
+            "svcCode": "FL082018",
+            "svcCodeNm": "산수유",
+            "svcCodeNmEng": "Cornelian Cherry Dogwood"
+        },
+        {
+            "svcCode": "FL0623A1",
+            "svcCodeNm": "산취선인장",
+            "svcCodeNmEng": "Mountain Ball Cactus"
+        },
+        {
+            "svcCode": "FL062379",
+            "svcCodeNm": "선인장",
+            "svcCodeNmEng": "Cactus"
+        },
+        {
+            "svcCode": "FL082019",
+            "svcCodeNm": "수국",
+            "svcCodeNmEng": "Hydrangea"
+        },
+        {
+            "svcCode": "FL052207",
+            "svcCodeNm": "심비디움",
+            "svcCodeNmEng": "Cymbidium Orchid"
+        },
+        {
+            "svcCode": "FL032521",
+            "svcCodeNm": "아마릴리스",
+            "svcCodeNmEng": "Amaryllis"
+        },
+        {
+            "svcCode": "FL082045",
+            "svcCodeNm": "애기사과",
+            "svcCodeNmEng": "Dwarf Crabapple"
+        },
+        {
+            "svcCode": "FL012146",
+            "svcCodeNm": "양귀비",
+            "svcCodeNmEng": "Poppy"
+        },
+        {
+            "svcCode": "FL032527",
+            "svcCodeNm": "오니소갈럼",
+            "svcCodeNmEng": "Ornithogalum"
+        },
+        {
+            "svcCode": "FL072423",
+            "svcCodeNm": "용담",
+            "svcCodeNmEng": "Gentian"
+        },
+        {
+            "svcCode": "FL022425",
+            "svcCodeNm": "작약",
+            "svcCodeNmEng": "Peony"
+        },
+        {
+            "svcCode": "FL082026",
+            "svcCodeNm": "장미",
+            "svcCodeNmEng": "Rose"
+        },
+        {
+            "svcCode": "FL082033",
+            "svcCodeNm": "철쭉",
+            "svcCodeNmEng": "Royal Azalea"
+        },
+        {
+            "svcCode": "FL022427",
+            "svcCodeNm": "카네이션",
+            "svcCodeNmEng": "Carnation"
+        },
+        {
+            "svcCode": "FL032532",
+            "svcCodeNm": "칼라",
+            "svcCodeNmEng": "Calla Lily"
+        },
+        {
+            "svcCode": "FL042643",
+            "svcCodeNm": "커피나무",
+            "svcCodeNmEng": "Coffee Plant"
+        },
+        {
+            "svcCode": "FL052212",
+            "svcCodeNm": "팔레높시스(호접란)",
+            "svcCodeNmEng": "Phalaenopsis Orchid (Moth Orchid)"
+        },
+        {
+            "svcCode": "FL012167",
+            "svcCodeNm": "팬지",
+            "svcCodeNmEng": "Pansy"
+        },
+        {
+            "svcCode": "FL012168",
+            "svcCodeNm": "페튜니아",
+            "svcCodeNmEng": "Petunia"
+        },
+        {
+            "svcCode": "FL042653",
+            "svcCodeNm": "포인세티아",
+            "svcCodeNmEng": "Poinsettia"
+        },
+        {
+            "svcCode": "FL032540",
+            "svcCodeNm": "프리지어",
+            "svcCodeNmEng": "Freesia"
+        },
+        {
+            "svcCode": "FL022452",
+            "svcCodeNm": "홍화",
+            "svcCodeNmEng": "Safflower"
+        }
+    ],
+    "animals":[
+        {
+            "svcCode": "LP085808",
+            "svcCodeNm": "가축위생과 질병",
+            "svcCodeNmEng": "Livestock Hygiene and Diseases"
+        },
+        {
+            "svcCode": "LP054170",
+            "svcCodeNm": "개",
+            "svcCodeNmEng": "Dog"
+        },
+        {
+            "svcCode": "LP044246",
+            "svcCodeNm": "관상용 새기르기",
+            "svcCodeNmEng": "Raising Ornamental Birds"
+        },
+        {
+            "svcCode": "LP044165",
+            "svcCodeNm": "관상조류",
+            "svcCodeNmEng": "Ornamental Birds"
+        },
+        {
+            "svcCode": "LP065699",
+            "svcCodeNm": "기타 조사료",
+            "svcCodeNmEng": "Other Forage"
+        },
+        {
+            "svcCode": "LP0141WZ",
+            "svcCodeNm": "기타대가축",
+            "svcCodeNmEng": "Other Large Livestock"
+        },
+        {
+            "svcCode": "LP024139",
+            "svcCodeNm": "기타돼지",
+            "svcCodeNmEng": "Other Pigs"
+        },
+        {
+            "svcCode": "LP0241WY",
+            "svcCodeNm": "기타중가축",
+            "svcCodeNmEng": "Other Medium Livestock"
+        },
+        {
+            "svcCode": "LP0541WV",
+            "svcCodeNm": "기타특수가축",
+            "svcCodeNmEng": "Other Specialty Livestock"
+        },
+        {
+            "svcCode": "LP0141WU",
+            "svcCodeNm": "낙농",
+            "svcCodeNmEng": "Dairy Farming"
+        },
+        {
+            "svcCode": "LP044150",
+            "svcCodeNm": "닭",
+            "svcCodeNmEng": "Chicken"
+        },
+        {
+            "svcCode": "LP024130",
+            "svcCodeNm": "돼지",
+            "svcCodeNmEng": "Pig"
+        },
+        {
+            "svcCode": "LP014110",
+            "svcCodeNm": "말",
+            "svcCodeNmEng": "Horse"
+        },
+        {
+            "svcCode": "LP065601",
+            "svcCodeNm": "사료작물",
+            "svcCodeNmEng": "Forage Crops"
+        },
+        {
+            "svcCode": "LP024184",
+            "svcCodeNm": "사슴",
+            "svcCodeNmEng": "Deer"
+        },
+        {
+            "svcCode": "LP065700",
+            "svcCodeNm": "섬유질배합사료",
+            "svcCodeNmEng": "Fiber Mixed Feed"
+        },
+        {
+            "svcCode": "LP044245",
+            "svcCodeNm": "양계",
+            "svcCodeNmEng": "Poultry Farming"
+        },
+        {
+            "svcCode": "LP024141",
+            "svcCodeNm": "염소",
+            "svcCodeNmEng": "Goat"
+        },
+        {
+            "svcCode": "LP044162",
+            "svcCodeNm": "오리",
+            "svcCodeNmEng": "Duck"
+        },
+        {
+            "svcCode": "LP0241WT",
+            "svcCodeNm": "유산양",
+            "svcCodeNmEng": "Dairy Goat"
+        },
+        {
+            "svcCode": "LP014123",
+            "svcCodeNm": "육우",
+            "svcCodeNmEng": "Beef Cattle"
+        },
+        {
+            "svcCode": "LP014122",
+            "svcCodeNm": "젖소",
+            "svcCodeNmEng": "Dairy Cow"
+        },
+        {
+            "svcCode": "LP014121",
+            "svcCodeNm": "한우",
+            "svcCodeNmEng": "Hanwoo (Korean Native Cattle)"
+        }
+        ],
+    "green manures":[
+        {
+            "svcCode": "FG0256WY",
+            "svcCodeNm": "기타녹비작물",
+            "svcCodeNmEng": "Other Green Manure Crops"
+        },
+        {
+            "svcCode": "FG0256WD",
+            "svcCodeNm": "헤어리베치",
+            "svcCodeNmEng": "Hairy Vetch"
+        },
+        {
+            "svcCode": "FG0256WI",
+            "svcCodeNm": "화본과류",
+            "svcCodeNmEng": "Grasses (Poaceae family)"
+        }
+    ],
+    "insects":[
+        {
+            "svcCode": "IN0342WX",
+            "svcCodeNm": "기타산업곤충",
+            "svcCodeNmEng": "Other Industrial Insects"
+        },
+        {
+            "svcCode": "IN0142WZ",
+            "svcCodeNm": "기타잠사",
+            "svcCodeNmEng": "Other Sericulture"
+        },
+        {
+            "svcCode": "IN0142W2",
+            "svcCodeNm": "누에",
+            "svcCodeNmEng": "Silkworm"
+        },
+        {
+            "svcCode": "IN0142W1",
+            "svcCodeNm": "뽕나무",
+            "svcCodeNmEng": "Mulberry Tree"
+        },
+        {
+            "svcCode": "IN0342W8",
+            "svcCodeNm": "식약용곤충",
+            "svcCodeNmEng": "Edible/Medicinal Insects"
+        },
+        {
+            "svcCode": "IN0142W3",
+            "svcCodeNm": "실크",
+            "svcCodeNmEng": "Silk"
+        },
+        {
+            "svcCode": "IN0342W7",
+            "svcCodeNm": "애완정서곤충",
+            "svcCodeNmEng": "Pet/Emotional Support Insects"
+        },
+        {
+            "svcCode": "IN0242W4",
+            "svcCodeNm": "양봉",
+            "svcCodeNmEng": "Beekeeping"
+        },
+        {
+            "svcCode": "IN0242W6",
+            "svcCodeNm": "양봉산물",
+            "svcCodeNmEng": "Bee Products"
+        },
+        {
+            "svcCode": "IN0142WV",
+            "svcCodeNm": "양잠",
+            "svcCodeNmEng": "Sericulture (Silkworm Farming)"
+        },
+        {
+            "svcCode": "IN0442WB",
+            "svcCodeNm": "천적곤충",
+            "svcCodeNmEng": "Natural Enemy Insects (Beneficial Insects)"
+        },
+        {
+            "svcCode": "IN0342W9",
+            "svcCodeNm": "화분매개곤충",
+            "svcCodeNmEng": "Pollinating Insects"
+        }
+        ]
+}
