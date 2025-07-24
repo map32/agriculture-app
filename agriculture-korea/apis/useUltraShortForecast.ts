@@ -69,7 +69,7 @@ export const getUltraShortTermForecast = async (nx: number | string, ny: number 
         time = baseTimes[baseTimes.length - 1];
     }
     try {
-        console.log(process.env.EXPO_PUBLIC_SHORT_TERM_KEY)
+        //console.log(process.env.EXPO_PUBLIC_SHORT_TERM_KEY)
         const res = await axios.get('https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst',{
             params: {
                 serviceKey: process.env.EXPO_PUBLIC_SHORT_TERM_KEY,

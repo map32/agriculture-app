@@ -67,7 +67,7 @@ export const getCurrentWeather = async (nx: number | string, ny: number | string
         time = baseTimes[baseTimes.length - 1];
     }
     try {
-        console.log(process.env.EXPO_PUBLIC_SHORT_TERM_KEY)
+        //console.log(process.env.EXPO_PUBLIC_SHORT_TERM_KEY)
         const res = await axios.get('https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst',{
             params: {
                 serviceKey: process.env.EXPO_PUBLIC_SHORT_TERM_KEY,

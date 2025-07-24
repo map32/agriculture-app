@@ -63,7 +63,7 @@ export const getShortTermForecast = async (nx: number | string, ny: number | str
             break;
         }
     }
-
+    
     // If current time is before the earliest base time, use previous day's last base time
     if (hhmm < baseTimes[0]) {
         const prevDate = new Date(date);
@@ -72,7 +72,7 @@ export const getShortTermForecast = async (nx: number | string, ny: number | str
         time = baseTimes[baseTimes.length - 1];
     }
     try {
-        console.log(process.env.EXPO_PUBLIC_SHORT_TERM_KEY)
+        //console.log(process.env.EXPO_PUBLIC_SHORT_TERM_KEY)
         const res = await axios.get('https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst',{
             params: {
                 serviceKey: process.env.EXPO_PUBLIC_SHORT_TERM_KEY,

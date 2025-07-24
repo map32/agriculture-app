@@ -10,7 +10,7 @@
                 height: 1em;
                 width: 1em;
                 z-index: 10;
-                background-color: rgba(154, 224, 245, 0.377);
+                background-color: rgba(154, 224, 245, 0.66);
                 padding: 5px;
                 border-radius: 5px;
                 box-shadow: 0 2px 5px rgba(0,0,0,0.3);
@@ -21,7 +21,7 @@
                 right: 10px;
                 width: 3em;
                 height: 1.5em;
-                background-color: rgba(154, 224, 245, 0.377);
+                background-color: rgba(154, 224, 245, 0.66);
                 padding: 5px;
                 border-radius: 5px;
                 box-shadow: 0 2px 5px rgba(0,0,0,0.3);
@@ -54,6 +54,19 @@
                 border-left: 10px solid transparent;
                 border-right: 10px solid transparent;
                 border-bottom: 10px solid rgba(255, 255, 255, 1);
+            }
+            .error {
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 9999;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: rgba(255,0,0,0.8);
+
             }
         </style>
     </head>
@@ -91,10 +104,18 @@
                         </div>`;
                 });
             };
+
+            function removePolygons() {
+                polygons.forEach((polygon) => polygon.setMap(null));
+                overlays.forEach((overlay) => overlay.setMap(null));
+                polygons = []
+                overlays = []
+                opened = []
+            }
             function initPolygons(polygons_) {
-                const newDiv = document.createElement('div');
+                try {
                 polygons_.forEach(polygon => {
-                    const convertedPath = polygon.path.map(obj => new kakao.maps.LatLng(obj.Ma, obj.La));
+                    const convertedPath = polygon.path.map(obj => new kakao.maps.LatLng(obj.lat, obj.lng));
                     const obj = new kakao.maps.Polygon({
                         map: map,
                         path: convertedPath,
@@ -125,6 +146,7 @@
                         opened[i] = !opened[i];
                         if (window.ReactNativeWebView) {
                             const data = {
+                                id: polygons_[i].id,
                                 path: polygons[i].getPath().map((latlng) => ({lat: latlng.getLat(), lng: latlng.getLng()})),
                                 center: {lat: center.getLat(), lng: center.getLng()},
                                 area: polygons[i].getArea(),
@@ -136,6 +158,12 @@
                             }))
                         }
                     })
+                }
+                } catch (err){
+                    const newDiv = document.createElement('div');
+                    newDiv.className = "error";
+                    newDiv.innerHTML = err;
+                    document.body.appendChild(newDiv)
                 }
                 
             }
@@ -204,7 +232,7 @@
                         document.addEventListener('initpolygons', function(e) {
                             try {
                                 const polygonsData = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail;
-                                if (polygonsData) initPolygons(polygonsData);
+                                if (polygonsData) initPolygons(polygonsData); else throw new Error(`polygonsData is not valid: ${polygonsData}`)
                             } catch (error) {
                                 const newDiv = document.createElement('div');
                                 newDiv.textContent = 'Error parsing polygons data: ' + error.message;
@@ -221,6 +249,9 @@
                         window.ReactNativeWebView.postMessage(JSON.stringify({
                             type: 'ready'
                         }));
+                        document.addEventListener('removepolygons', function(e) {
+                            removePolygons();
+                        });
                     }
                     
                 } catch (e) {

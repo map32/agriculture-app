@@ -12,25 +12,34 @@ import { getShortTermForecast } from "@/apis/useWeatherForecast";
 
 const getPolygons = async () => {
   const polygons = await AsyncStorage.getItem('polygons');
+  //console.log('Polygons found:', polygons);
   if (polygons) {
-    console.log('Polygons found:', polygons);
+    //console.log('Polygons found:', polygons);
     return JSON.parse(polygons);
   }
-  console.log('No polygons found, returning empty array');
+  //console.log('No polygons found, returning empty array');
   return [];
+}
+
+const getPolygon = async (id:string) => {
+  const polygons = await getPolygons() as any[];
+  return polygons.find((item) => item.id === id);
 }
 
 const addPolygon = async (polygon: any) => {
   const polygons = await getPolygons();
   polygons.push(polygon);
+  //console.log(polygons);
   await AsyncStorage.setItem('polygons', JSON.stringify(polygons));
 }
 
 const editPolygon = async (polygon: any) => {
   const polygons = await getPolygons();
   const index = polygons.findIndex((p: any) => p.id === polygon.id);
+  //console.log(index, polygon);
   if (index !== -1) {
     polygons[index] = polygon;
+    //console.log(polygon)
     await AsyncStorage.setItem('polygons', JSON.stringify(polygons));
   }
 }
@@ -60,8 +69,38 @@ export default function Index() {
     });
   }
 
-  const saveData = () => {
-    editPolygon(selectedPlot);
+  const resetPolygon = async () => {
+    await AsyncStorage.removeItem('polygons');
+    const run = `
+          (function () {
+          try {
+            const event = new CustomEvent('initpolygons', {detail: []});
+            document.dispatchEvent(event);
+          }
+          catch (error) {
+          const newDiv = document.createElement('div');
+                              newDiv.style.position = 'absolute';
+                              newDiv.style.top = '10px';
+                              newDiv.style.left = '10px';
+                              newDiv.style.background = 'rgba(255,255,255,0.8)';
+                              newDiv.style.padding = '8px';
+                              newDiv.style.borderRadius = '4px';
+                              newDiv.style.zIndex = '10';
+                              newDiv.style.minWidth = '200px';
+                              newDiv.style.maxWidth = '400px';
+                              newDiv.style.minHeight = '50px';
+                              newDiv.textContent = error.message;
+                              document.body.appendChild(newDiv);
+  }
+          })();
+        `;
+        //console.log('WebView is ready, injecting polygons', run);
+        webviewRef.current?.injectJavaScript(run);
+  }
+
+
+  const saveData = (edits: any) => {
+    editPolygon({...selectedPlot, ...edits});
   }
   const handleMessage = async (event: any) => {
     const {data, type} = JSON.parse(event.nativeEvent.data);
@@ -102,20 +141,14 @@ export default function Index() {
       //console.log('WebView is ready, injecting polygons', run);
       webviewRef.current?.injectJavaScript(run);
     } else if (type === 'polygon-click') {
-      if ( !selectedPlot || selectedPlot && (data.center.lat != selectedPlot.center.lat || data.center.lng != selectedPlot.center.lng)) {
-        setSelectedPlot(data as PolygonType);
+      if ( !selectedPlot || selectedPlot && (data.id != selectedPlot.id)) {
+        setSelectedPlot(await getPolygon(data.id) as PolygonType);
       }
       showModal();
     }
   }
   return (
-    <SafeAreaView
-      style={{
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      }}
-    >
+    <View style={{flex:1}}>
       <WebView
         ref={webviewRef}
         originWhitelist={['*']}
@@ -124,21 +157,7 @@ export default function Index() {
         source={{html: html || ''}}
         style={{ height: windowHeight, width: width }}
       />
-      <TouchableOpacity style={{
-        position: 'absolute',
-        top: 2,
-        left: 2,
-        backgroundColor: 'rgba(128,255,231,0.8)',
-        height: 24,
-        width: 24,
-        borderRadius: 4
-      }}
-      onPress={async () => {
-        await getShortTermForecast(55,127);
-        }}>
-
-      </TouchableOpacity>
       <PlotModal modalRef={modalRef} data={selectedPlot} setData={setSelectedPlot} saveData={saveData}/>
-    </SafeAreaView>
+      </View>
   );
 }

@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import json
+import re
 def scrape_crop_codes():
     # Initialize the Chrome driver
     driver = webdriver.Chrome()
@@ -71,10 +72,32 @@ def scrape_crop_info():
                     })
             except Exception as e:
                 print(f"Error retrieving cultivars for {name} ({code}): {e}")
-            tableData = []
+            tableData = {}
             try:
                 info_element = driver.find_element(By.ID, "sectionCrop05")
-                tables = info_element.find_elements(By.ID, "nongScheduleTit")
+                buttons = info_element.find_elements(By.XPATH, "//ul[contains(@class, 'clearfix')]")
+                print(buttons)
+                ids = []
+                tables = []
+                titles = []
+                links = []
+                if len(buttons) == 0:
+                    tables = info_element.find_elements(By.XPATH, "//*[contains(@id, 'contentBox')]")
+                    tbl = info_element.find_element(By.XPATH, "//*[contains(@id, 'contentBox')]")
+                    ids = [re.search(r"[A-Za-z](\d+)",tbl.get_attribute("id").strip()).group(1)]
+                else:
+                    button = buttons[0]
+                    links = button.find_elements(By.TAG_NAME, "a")
+                    titles = [link.get_attribute("textContent").strip() for link in links]
+                    ids = [re.search(r"[\"\'](\d+)[\"\']",link.get_attribute("onclick").strip()).group(1) for link in links]
+                    #print('two')
+                    tables = info_element.find_elements(By.XPATH, "//*[contains(@id, 'contentBox')]")
+                print(ids, len(buttons), len(links))
+                for _, id in enumerate(ids):
+                    if len(titles) > 0:
+                        tableData[id] = {'title': titles[_], 'tables': []}
+                    else:
+                        tableData[id] = {'title': '', 'tables': []}
                 for table in tables:
                     title = table.find_element(By.TAG_NAME, "h5").get_attribute("textContent").strip()
                     rows = table.find_element(By.TAG_NAME, "tbody").find_elements(By.TAG_NAME, "tr")
@@ -101,7 +124,9 @@ def scrape_crop_info():
                         #print(f"{name} ({code}) - {title}: {ans}")
                         if len(ans) > 0:
                             ict_["rows"].append(ans)
-                    tableData.append(ict_)
+                   
+                    id = re.search(r"[A-Za-z](\d+)",table.get_attribute("id").strip()).group(1)
+                    tableData[id]['tables'].append(ict_)
             except Exception as e:
                 print(f"Error retrieving tables for {name} ({code}): {e}")
             cards = []

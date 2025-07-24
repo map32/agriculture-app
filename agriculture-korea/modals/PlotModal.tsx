@@ -50,8 +50,10 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData, saveData}) => {
     const [address, setAddress] = useState('');
     const [weather, setWeather] = useState<any>();
     const [selectedDate, setSelectedDate] = useState<string>();
+    const [edits, setEdits] = useState<Record<string, any>>({});
     const [condensed, setCondensed] = useState<any[]>();
     const insets = useSafeAreaInsets();
+    //console.log(data);
 
     const [sidePanelOpen, setSidePanelOpen] = useState(false);
 
@@ -82,6 +84,8 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData, saveData}) => {
     }, [sidePanelOpen, modalWidth]);
 
     useEffect(() => {
+        //console.log(data);
+        setEdits(!data ? {title: ''} : {title: data?.title});
         if (!data) return;
         const nearest = findClosestPoint([data.center.lng, data.center.lat]);
         const m_nearest = findMidtermClosestPoint([data.center.lng, data.center.lat]);
@@ -218,15 +222,15 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData, saveData}) => {
     const onFocus = () => {console.log(barWidth.value); barWidth.value = withTiming(100, {duration: 300})}
     const onBlur = () => {console.log(barWidth.value); barWidth.value = withTiming(0, {duration: 300})}
     return (
-        <SwipeModal ref={modalRef} wrapInGestureHandlerRootView maxHeight={600} onHide={saveData}>
+        <SwipeModal ref={modalRef} wrapInGestureHandlerRootView maxHeight={600} onHide={() => saveData(edits)} useKeyboardAvoidingView={false}>
             <View style={[styles.background, {paddingBottom: insets.bottom}]} onLayout={onModalLayout}>
                 <View style={styles.header}>
                     <TextInput
                         style={styles.titleedit}
-                        value={data?.title}
+                        value={edits?.title}
                         onFocus={onFocus}
                         onBlur={onBlur}
-                        onChangeText={(text) => {if (!data) return; setData({...data, title: text})}}
+                        onChangeText={(text) => {if (!data) return; setEdits({...edits, title: text})}}
                         placeholder="농지 이름"
                         placeholderTextColor="#aaa"
                     />
@@ -257,12 +261,6 @@ const PlotModal: FC<ModalProps> = ({modalRef, data, setData, saveData}) => {
                 />
 
                 <Text style={styles.text}>재배작물</Text>
-                <TouchableOpacity
-                    style={styles.panelButton}
-                    onPress={() => setSidePanelOpen(true)}
-                >
-                    <Text style={styles.text}>상세 정보 열기</Text>
-                </TouchableOpacity>
                 <Screen />
             </View>
             <Animated.View style={[styles.sideview, animatedStyle]}>

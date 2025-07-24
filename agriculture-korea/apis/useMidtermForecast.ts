@@ -37,7 +37,7 @@ export const getMediumTermRainForecast = async (regId: string, date?: Date) => {
         time = baseTimes[baseTimes.length - 1];
     }
     try {
-        console.log(process.env.EXPO_PUBLIC_SHORT_TERM_KEY)
+        //console.log(process.env.EXPO_PUBLIC_SHORT_TERM_KEY)
         const res = await axios.get('https://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst',{
             params: {
                 serviceKey: process.env.EXPO_PUBLIC_SHORT_TERM_KEY,
