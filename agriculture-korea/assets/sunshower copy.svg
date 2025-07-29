@@ -1,0 +1,31 @@
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    id="Layer_1"
+    data-name="Layer 1"
+    viewBox="0 0 64 64"
+    {...props}
+  >
+    <defs>
+      <style>
+        {
+          ".cls-2,.cls-5{fill:none;stroke-linecap:round;stroke-miterlimit:10;stroke-width:3px}.cls-2{stroke:#efcc00;transform:translate(8px,-4px)}.cls-5{stroke:#0baeff}.cls-4{transform:translate(-18px,-5px)}"
+        }
+      </style>
+    </defs>
+    <title />
+    <circle
+      cx={32}
+      cy={32}
+      r={17}
+      style={{
+        fill: "#efcc00",
+        transform: "translate(8px,-4px)",
+      }}
+    />
+    <path
+      d="M32 5v6M32 53v6M59 32h-6M11 32H5M51.09 12.91l-4.24 4.24M17.15 46.85l-4.24 4.24M51.09 51.09l-4.24-4.24M17.15 17.15l-4.24-4.24"
+      className="cls-2"
+    />
+    <path d="M32.5 55.5v7M26.5 53.5v7M38.5 53.5v7" className="cls-5" />
+    <path d="M32.5 55.5v7M26.5 53.5v7M38.5 53.5v7" className="cls-5 cls-4" />
+  </svg>

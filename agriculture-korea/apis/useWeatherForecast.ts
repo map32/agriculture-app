@@ -85,10 +85,13 @@ export const getShortTermForecast = async (nx: number | string, ny: number | str
                 ny
             }
         })
+        console.log(yyyymmdd, time, nx, ny, res.data.response);
         const {header, body} = res.data.response;
         if (header.resultCode !== '00') throw Error(header.resultMsg);
         const items: any[] = body.items.item;
         const structuredItems: { [key: string]: any } = {};
+        items.sort((a,b) => a.fcstTime.localeCompare(b.fcstTime));
+        items.sort((a,b) => a.fcstDate.localeCompare(b.fcstDate));
         items.forEach((val, ind) => {
             if (!structuredItems[val.fcstDate]) {
                 structuredItems[val.fcstDate] = {};
@@ -100,6 +103,6 @@ export const getShortTermForecast = async (nx: number | string, ny: number | str
         });
         return structuredItems;
     } catch (error) {
-        console.log(error);
+        throw Error(`Error fetching short term forecast: ${error}`);
     }
 }

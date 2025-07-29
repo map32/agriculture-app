@@ -1,4 +1,4 @@
-import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
+import { Text, View, SafeAreaView, TouchableOpacity, Alert } from "react-native";
 import WebView from "react-native-webview";
 import { useAssets } from 'expo-asset';
 import {readAsStringAsync} from 'expo-file-system';
@@ -9,6 +9,7 @@ import PlotModal from "@/modals/PlotModal";
 import { SwipeModalPublicMethods } from "@birdwingo/react-native-swipe-modal";
 import { PolygonType } from "@/types";
 import { getShortTermForecast } from "@/apis/useWeatherForecast";
+import { findClosestPoint, findMidtermClosestPoint } from "@/utils/turf";
 
 const getPolygons = async () => {
   const polygons = await AsyncStorage.getItem('polygons');
@@ -29,7 +30,7 @@ const getPolygon = async (id:string) => {
 const addPolygon = async (polygon: any) => {
   const polygons = await getPolygons();
   polygons.push(polygon);
-  //console.log(polygons);
+  console.log(polygons);
   await AsyncStorage.setItem('polygons', JSON.stringify(polygons));
 }
 
@@ -104,9 +105,8 @@ export default function Index() {
   }
   const handleMessage = async (event: any) => {
     const {data, type} = JSON.parse(event.nativeEvent.data);
-    //console.log('Received message from WebView:', data, type);
+    console.log('Message from WebView:', type, data);
     if (type === 'polygon') {
-      data.id = Math.random().toString(36).substr(2, 9);
       addPolygon(data).then(() => {
         //console.log('Polygon added:', data);
       }
@@ -115,10 +115,16 @@ export default function Index() {
       }
       );
     } else if (type === 'ready') {
+      const polygons = await getPolygons() as PolygonType[];
+      const polygonsWithAddress = polygons.map((polygon) => {
+        const nearest = findClosestPoint([polygon.center.lng, polygon.center.lat]);
+        const addr = nearest.properties['1단계'] + ' ' + nearest.properties['2단계'] + ' ' + nearest.properties['3단계'];
+        return {...polygon, addr}
+      })
       const run = `
         (function () {
         try {
-          const event = new CustomEvent('initpolygons', {detail: ${JSON.stringify(await getPolygons())}});
+          const event = new CustomEvent('initpolygons', {detail: ${JSON.stringify(polygonsWithAddress)}});
           document.dispatchEvent(event);
         }
         catch (error) {
@@ -138,13 +144,15 @@ export default function Index() {
 }
         })();
       `;
-      //console.log('WebView is ready, injecting polygons', run);
+      console.log('WebView is ready, injecting polygons', run);
       webviewRef.current?.injectJavaScript(run);
     } else if (type === 'polygon-click') {
       if ( !selectedPlot || selectedPlot && (data.id != selectedPlot.id)) {
-        setSelectedPlot(await getPolygon(data.id) as PolygonType);
+        setSelectedPlot({...data, ...await getPolygon(data.id)} as PolygonType);
       }
       showModal();
+    } else if (type === 'error') {
+      console.log('Error from WebView:', data);
     }
   }
   return (
@@ -157,6 +165,7 @@ export default function Index() {
         source={{html: html || ''}}
         style={{ height: windowHeight, width: width }}
       />
+      <TouchableOpacity onPress={resetPolygon}><Text>sdfsdfd</Text></TouchableOpacity>
       <PlotModal modalRef={modalRef} data={selectedPlot} setData={setSelectedPlot} saveData={saveData}/>
       </View>
   );

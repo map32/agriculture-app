@@ -43,14 +43,22 @@
                 border-radius: 5px;
                 box-shadow: 0 2px 5px rgba(0,0,0,0.3);
                 z-index: 10;
-                width: 10em;
-                min-height: 3em;
+                width: 6em;
+                min-height: 2em;
+            }
+
+            .info p {
+                margin: 0;
+                padding: 0;
+                font-size: 0.5em;
+                color: #333;
             }
 
             .arrow {
                 position: absolute;
                 width: 0;
                 height: 0;
+                
                 border-left: 10px solid transparent;
                 border-right: 10px solid transparent;
                 border-bottom: 10px solid rgba(255, 255, 255, 1);
@@ -90,20 +98,31 @@
             let polygons = [];
             let overlays = [];
             let opened = [];
+
+            const getInfoContentSingle = (polygon) => {
+                return `<div class="info">
+                    <div class="arrow" style="top: -10px; left: 50%; transform: translateX(-50%);"></div>
+                        <p>${polygon.title || 'Farmland'}</p>
+                        <p>${polygon.addr || 'addr error'}</p>
+                        <p>${parseArea(polygon.area) || 'area error'} sqkm</p>
+                    </div>`;
+            };
+
             const getInfoContent = (polygons) => {
                 if (polygons.length === 0) {
                     return '<p>다각형 정보가 없습니다.</p>';
                 }
-                return polygons.map((polygon, index) => {
-                    const path = polygon.getPath();
-                    const coordinates = path.map(latlng => `(${latlng.getLat().toFixed(6)}, ${latlng.getLng().toFixed(6)})`).join(', ');
-                    return `<div class="info">
-                        <div class="arrow" style="top: -10px; left: 50%; transform: translateX(-50%);"></div>
-                            <p>다각형 정보</p>
-                            <p>다각형 ${index + 1}: ${coordinates}</p>
-                        </div>`;
-                });
+                return polygons.map((polygon, index) => getInfoContentSingle(polygon));
             };
+
+            function parseArea(area) {
+                if (typeof area === 'number') return area / 1000000; // Convert to square kilometers
+                if (typeof area === 'string') {
+                    const num = parseFloat(area.replace(/[^0-9.]/g, '')) / 1000000;
+                    return isNaN(num) ? 0 : num;
+                }
+                return 0;
+            }
 
             function removePolygons() {
                 polygons.forEach((polygon) => polygon.setMap(null));
@@ -112,6 +131,32 @@
                 overlays = []
                 opened = []
             }
+            function removePolygon(id) {
+                const ind = polygons.findIndex(poly => poly.id === id)
+                polygons[ind].setMap(null);
+                overlays[ind].setMap(null);
+                polygons.splice(ind,1);
+                overlays.splice(ind,1);
+                opened.splice(ind,1);
+            }
+            function addPolygonClickListener(polygon, id) {
+                kakao.maps.event.addListener(polygon, 'click', function(e) {
+                    if (window.ReactNativeWebView) {
+                        const data = {
+                            id: id,
+                            path: polygon.getPath().map((latlng) => ({lat: latlng.getLat(), lng: latlng.getLng()})),
+                            center: {lat: polygon.center.getLat(), lng: polygon.center.getLng()},
+                            area: polygon.getArea(),
+                            perimeter: polygon.getLength()
+                        }
+                        window.ReactNativeWebView.postMessage(JSON.stringify({
+                            data: data,
+                            type: 'polygon-click'
+                        }))
+                    }
+                })
+            }
+
             function initPolygons(polygons_) {
                 try {
                 polygons_.forEach(polygon => {
@@ -128,12 +173,12 @@
                     obj.setMap(map);
                     polygons.push(obj);
                 });
-                const overlay = getInfoContent(polygons);
+                const overlay = getInfoContent(polygons_);
                 for (let i=0;i<polygons.length;i++) {
                     const center = getPolygonCenter(polygons[i]);
                     const custom = new kakao.maps.CustomOverlay({
                         map: map,
-                        position: center,
+                        position: getPolygonBottomCenter(polygons[i]),
                         clickable: true,
                         content: overlay[i],
                         yAnchor: 0
@@ -160,10 +205,10 @@
                     })
                 }
                 } catch (err){
-                    const newDiv = document.createElement('div');
-                    newDiv.className = "error";
-                    newDiv.innerHTML = err;
-                    document.body.appendChild(newDiv)
+                     window.ReactNativeWebView.postMessage(JSON.stringify({
+                        type: 'error',
+                        data: err
+                    }));
                 }
                 
             }
@@ -201,6 +246,22 @@
                 return new kakao.maps.LatLng(avgLat, avgLng);
             }
 
+            function getPolygonBottomCenter(poly) {
+                const path = poly.getPath();
+                if (path.length === 0) return null;
+
+                let north = path[0], south = path[0], east = path[0], west = path[0];
+                for (let i = 1; i < path.length; i++) {
+                    const pt = path[i];
+                    if (pt.getLat() < south.getLat()) south = pt;
+                    if (pt.getLng() > east.getLng()) east = pt;
+                    if (pt.getLng() < west.getLng()) west = pt;
+                }
+                const bottomLat = south.getLat();
+                const avgLng = (north.getLng() + south.getLng() + east.getLng() + west.getLng()) / 4;
+                return new kakao.maps.LatLng(bottomLat, avgLng);
+            }
+
             function initMap() {
                 
                 const container = document.getElementById('map');
@@ -234,37 +295,30 @@
                                 const polygonsData = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail;
                                 if (polygonsData) initPolygons(polygonsData); else throw new Error(`polygonsData is not valid: ${polygonsData}`)
                             } catch (error) {
-                                const newDiv = document.createElement('div');
-                                newDiv.textContent = 'Error parsing polygons data: ' + error.message;
-                                newDiv.style.position = 'absolute';
-                                newDiv.style.top = '10px';
-                                newDiv.style.left = '10px';
-                                newDiv.style.background = 'rgba(255,255,255,0.8)';
-                                newDiv.style.padding = '8px';
-                                newDiv.style.borderRadius = '4px';
-                                newDiv.style.zIndex = '10';
-                                document.body.appendChild(newDiv);
-                            }
+                                 window.ReactNativeWebView.postMessage(JSON.stringify({
+                                    type: 'error',
+                                    data: error
+                                }));
+                                }
                         });
+                        
                         window.ReactNativeWebView.postMessage(JSON.stringify({
                             type: 'ready'
                         }));
                         document.addEventListener('removepolygons', function(e) {
                             removePolygons();
                         });
+                        document.addEventListener('removepolygon', function(e) {
+                            const id = JSON.parse(e.detail);
+                            removePolygon(id);
+                        });
                     }
                     
                 } catch (e) {
-                    const newDiv = document.createElement('div');
-                    newDiv.textContent = 'error occured: ' + e.message;
-                    newDiv.style.position = 'absolute';
-                    newDiv.style.top = '10px';
-                    newDiv.style.left = '10px';
-                    newDiv.style.background = 'rgba(255,255,255,0.8)';
-                    newDiv.style.padding = '8px';
-                    newDiv.style.borderRadius = '4px';
-                    newDiv.style.zIndex = '10';
-                    document.body.appendChild(newDiv);
+                     window.ReactNativeWebView.postMessage(JSON.stringify({
+                        type: 'error',
+                        data: e
+                    }));
                 }
             }
             // Draw button click event
@@ -347,7 +401,31 @@
                         });
                         polygon.setMap(map);
                         polygons.push(polygon);
-                        sendPolygonData({path: state.polygon, strokeWeight: 2, strokeColor: '#FF0000', strokeOpacity: 0.8, fillColor: '#FF0000', fillOpacity: 0.5});
+                        const id = Math.random().toString(36).substr(2, 9);
+                        const center = getPolygonCenter(polygon);
+                        sendPolygonData({id, center: {lat: center.getLat(), lng: center.getLng()}, area: polygon.getArea(), perimeter: polygon.getLength(), path: state.polygon.map((latlng) => ({lat: latlng.getLat(), lng: latlng.getLng()})), strokeWeight: 2, strokeColor: '#FF0000', strokeOpacity: 0.8, fillColor: '#FF0000', fillOpacity: 0.5});
+                        kakao.maps.event.addListener(polygons[polygons.length - 1], 'click', function(e) {
+                            const polygon = polygons[polygons.length - 1];
+                            try {
+                            if (window.ReactNativeWebView) {
+                                const data = {
+                                    id: id,
+                                    path: polygon.getPath().map((latlng) => ({lat: latlng.getLat(), lng: latlng.getLng()})),
+                                    center: {lat: center.getLat(), lng: center.getLng()},
+                                    area: polygon.getArea(),
+                                    perimeter: polygon.getLength()
+                                }
+                                window.ReactNativeWebView.postMessage(JSON.stringify({
+                                    data: data,
+                                    type: 'polygon-click'
+                                }))
+                            } } catch (error) {
+                                window.ReactNativeWebView.postMessage(JSON.stringify({
+                                    type: 'error',
+                                    data: error.toString()
+                                }));
+                            }
+                        });
                         resetState();
                         document.getElementById('drawButton').textContent = '추가';
                     }

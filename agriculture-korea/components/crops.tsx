@@ -27,6 +27,7 @@ const DataContext = createContext<DataContextType>({
 
 const searchFn = (text: string) => {
     const items = cropFlattened;
+    if (text.length === 0) return items;
     const filtered = items.filter((item) => item.svcCodeNm.includes(text) || item.svcCodeNmEng.toLowerCase().includes(text))
     return filtered;
 }
@@ -35,12 +36,14 @@ const Screen = () => {
     const [search, setSearch] = useState('');
     const [list, setList] = useState<any[]>(cropFlattened);
     const [category, setCategory] = useState(null);
+    useEffect(() => {
+        setList(searchFn(search))
+    },[search])
     return (
         <DataContext.Provider value={{search, setSearch, list, setList, category, setCategory}}>
             <View style={styles.container}>
                 <View style={styles.searchRow}>
                     <SearchBar />
-                    <SearchButton />
                 </View>
                 <FlatList 
                     data={list}
@@ -48,7 +51,7 @@ const Screen = () => {
                     style={{flex: 1}}
                     renderItem={({item}) => (
                         <TouchableOpacity>
-                            <Text style={styles.text}>{item.svcCodeNmEng}</Text>
+                            <Text style={styles.text}>{item.svcCodeNmEng} ({item.svcCodeNm})</Text>
                         </TouchableOpacity>
                     )}
                 />
@@ -60,11 +63,23 @@ const Screen = () => {
 const SearchBar = () => {
     const {search, setSearch} = useContext(DataContext);
     return (
-        <TextInput 
+        <View>
+            <TextInput
             autoCapitalize='none'
+            autoComplete='off'
+            autoCorrect={false}
             onChangeText={setSearch}
-            style={{flex: 1, height: 40, color: '#fff'}}
-        />
+            value={search}
+            placeholder="Search for crops..."
+            
+            />
+            {/* Clear button for search input */}
+            {search.length > 0 && (
+            <TouchableOpacity onPress={() => setSearch('')} >
+                <Text style={{ fontSize: 18 }}>✕</Text>
+            </TouchableOpacity>
+            )}
+        </View>
     )
 }
 

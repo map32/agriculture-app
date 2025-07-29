@@ -22,6 +22,7 @@ export const ptyCodesVeryShort: Record<string, string> = {
     "1": "비",
     "2": "비/눈",
     "3": "눈",
+    "4": "소나기",
     "5": "빗방울",
     "6": "빗방울눈날림",
     "7": "눈날림"
@@ -93,9 +94,8 @@ export const getCurrentWeather = async (nx: number | string, ny: number | string
             }
             structuredItems[val.baseDate][val.baseTime][val.category] = val.obsrValue;
         });
-        console.log(structuredItems)
         return structuredItems;
     } catch (error) {
-        console.log(error);
+        throw Error(`Error fetching current weather: ${error}`);
     }
 }

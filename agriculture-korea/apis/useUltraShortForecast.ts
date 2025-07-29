@@ -97,6 +97,6 @@ export const getUltraShortTermForecast = async (nx: number | string, ny: number 
         });
         return structuredItems;
     } catch (error) {
-        console.log(error);
+        throw Error(`Error fetching ultra short term forecast: ${error}`);
     }
 }
